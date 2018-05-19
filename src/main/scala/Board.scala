@@ -56,4 +56,10 @@ class Board {
     else
       "black"
   }
+
+  /*def canMove(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
+    if( value(x_e, y_e) == 1 || value(x_e, y_e) == -1 )
+      false
+    else if( y_e - 1 == y_s || y_e + 1 == y_s || x_e - 1 == x_s || x_s )
+  }*/
 }
