@@ -1,11 +1,25 @@
 object Main extends App {
-    println("text communicate")
-  /*def sum(list :List[Int]):Int = {
-    if(list.length == 1)
-      list.head
-    else
-      sum(list.tail) + list.head
-  }
-  val list:List[Int] = List (1,2,3,4,5)
-  print(sum(list))*/
+    val board = new Board
+    /*println(board.value(5, 2))
+    println(board.value(4, 3))
+    board.move(5, 2, 4, 3)
+    println(board.value(5, 2))
+    println(board.value(4, 3))
+    board.move(2, 1, 3, 2)
+    println(board.value(3, 2))
+    println("strike test ")
+    println("strike place " + board.value(2, 1))
+    println("striked " + board.value(3, 2))
+    println("striker" + board.value(4, 3))
+    board.strikeOnce(4, 3, 2, 1)
+    println("strike place " + board.value(2, 1))
+    println("striked " + board.value(3, 2))
+    println("striker " + board.value(4, 3))*/
+    board.king(5, 4)
+    println(board.value(5, 4))
+    board.move(2, 1, 3, 2)
+    println(board.value(3, 2))
+    board.kingMove(5, 4, 3, 2)
+    println(board.value(5, 4))
+    println(board.value(3, 2))
 }

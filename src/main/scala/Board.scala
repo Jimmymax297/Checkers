@@ -1,5 +1,5 @@
 class Board {
-  var tab:Array[Array[Int]] = {
+  val tab:Array[Array[Int]] = {
     val t = Array(Array(0, 1, 0, 1, 0, 1, 0, 1),
       Array(1, 0, 1, 0, 1, 0, 1, 0),
       Array(0, 1, 0, 1, 0, 1, 0, 1),
@@ -30,11 +30,15 @@ class Board {
         change(x, y, -2)
   }
 
-  def color(x: Int, y: Int): String = {
-    if (value(x, y) > 0)
-      "white"
-    else
-      "black"
+  def color(x: Int, y: Int): Any = {
+    if (value(x, y) == 0)
+      "board"
+    else {
+      if (value(x, y) > 0)
+        "white"
+      else if (value(x, y) < 0)
+        "black"
+    }
   }
 
   def direction(x_s: Int, y_s: Int, x_e: Int, y_e: Int, v: Int): AnyVal = {
@@ -57,15 +61,18 @@ class Board {
   }
 
   def canMove(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
-    if ((x_s == x_e || y_s == y_e) || (value(x_e, y_e) == 1 || value(x_e, y_e) == -1))
+    if ((x_s == x_e || y_s == y_e) ||
+        value(x_e, y_e) != 0)
       false
     else
       true
   }
 
   def canStrike(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
-    if (isChecker(x_s, y_s) && canMove(x_s, y_s, x_e, y_s) && value((x_s + x_e) / 2, (y_s + y_e) / 2) == -value(x_s, y_s))
+    if (isChecker(x_s, y_s) && canMove(x_s, y_s, x_e, y_e) && value((x_s + x_e) / 2, (y_s + y_e) / 2) == -value(x_s, y_s)) {
+      println("canStrike")
       true
+    }
     else
       false
   }
@@ -78,9 +85,61 @@ class Board {
     }
   }
 
-  /*def canStrikeAgain(x_s: Int, y_s: Int): Boolean = {
-    if ()
-  }*/
+  def canStrikeAgain(x_s: Int, y_s: Int): Boolean = {
+    val v = value(x_s, y_s)
+    if ((value(x_s - 1, y_s + 1) == -v && value(x_s - 2, y_s + 2) == 0) ||
+        (value(x_s + 1, y_s + 1) == -v && value(x_s + 2, y_s + 2) == 0) ||
+        (value(x_s + 1, y_s - 1) == -v && value(x_s + 2, y_s - 2) == 0) ||
+        (value(x_s - 1, y_s - 1) == -v && value(x_s - 2, y_s - 2) == 0))
+      true
+    else
+      false
+  }
+
+  def isKing(x: Int, y: Int): Boolean = {
+    value(x, y) == 2 || value(x, y) == -2
+  }
+
+  def canKingMove(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
+    val res = for{
+      i <- 1 until math.abs(y_e - y_s)
+      if math.abs(y_e - y_s) == math.abs(x_e - x_s)
+    } yield {
+      if (value(x_s + i, y_s + i) != 0)
+        1
+      else
+        0
+    }
+    res.sum == 0
+  }
+
+  def canKingStrike(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
+    val res = for{
+      i <- 1 until math.abs(y_e - y_s)
+      if math.abs(y_e - y_s) == math.abs(x_e - x_s)
+    } yield {
+      if (color(x_s + i, y_s + i) == color(x_s, y_s) || color(x_s + i, y_s + i) == color(x_s, y_s))
+        return false
+      else if (value(x_s + i, y_s + i) == -value(x_s, y_s) || value(x_s + i, y_s + i) == -value(x_s, y_s) + 1)
+        1
+      else
+        0
+    }
+    res.sum == 1
+  }
+
+  def kingMove(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Unit = {
+    if (isKing(x_s, y_s) && canKingMove(x_s, y_s, x_e, y_e)){
+      tab(x_e)(y_e) = value(x_s, y_s)
+      tab(x_s)(y_s) = 0
+    }
+  }
+
+  def kingStrike(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Unit = {
+    if (isKing(x_s, y_s) && canKingStrike(x_s, y_s, x_e, y_e)) {
+
+    }
+  }
 
   /*def whereCanStrike(x_s: Int, y_s: Int): Option[List[Int, Int]] = {
     if ( isChecker(x_s, y_s) )
