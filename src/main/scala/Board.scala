@@ -1,18 +1,24 @@
 class Board {
+  val white = -1
+  val empty = 0
+  val black = 1
+  val whiteKing = -2
+  val blackKing = 2
   val tab:Array[Array[Int]] = {
-    val t = Array(Array(0, 1, 0, 1, 0, 1, 0, 1),
-      Array(1, 0, 1, 0, 1, 0, 1, 0),
-      Array(0, 1, 0, 1, 0, 1, 0, 1),
-      Array(0, 0, 0, 0, 0, 0, 0, 0),
-      Array(0, 0, 0, 0, 0, 0, 0, 0),
-      Array(-1, 0,-1, 0,-1, 0,-1, 0),
-      Array(0,-1, 0,-1, 0,-1, 0,-1),
-      Array(-1, 0,-1, 0,-1, 0,-1, 0))
+    val t = Array(
+      Array(empty, black, empty, black, empty, black, empty, black),
+      Array(black, empty, black, empty, black, empty, black, empty),
+      Array(empty, black, empty, black, empty, black, empty, black),
+      Array(empty, empty, empty, empty, empty, empty, empty, empty),
+      Array(empty, empty, empty, empty, empty, empty, empty, empty),
+      Array(white, empty, white, empty, white, empty, white, empty),
+      Array(empty, white, empty, white, empty, white, empty, white),
+      Array(white, empty, white, empty, white, empty, white, empty))
     t
   }
 
   def isChecker(x: Int, y: Int): Boolean = {
-    if(tab(x)(y) == 1 || tab(x)(y) == -1)
+    if(tab(x)(y) == white || tab(x)(y) == black)
       true
     else
       false
@@ -24,32 +30,32 @@ class Board {
 
   def king(x: Int, y: Int): Unit = {
     if(isChecker(x, y))
-      if(value(x, y) == 1)
-        change(x, y, 2)
+      if(value(x, y) == black)
+        change(x, y, blackKing)
       else
-        change(x, y, -2)
+        change(x, y, whiteKing)
   }
 
   def color(x: Int, y: Int): Any = {
-    if (value(x, y) == 0)
+    if (value(x, y) == empty)
       "board"
     else {
-      if (value(x, y) > 0)
+      if (value(x, y) == white || value(x, y) == whiteKing)
         "white"
-      else if (value(x, y) < 0)
+      else
         "black"
     }
   }
 
   def direction(x_s: Int, y_s: Int, x_e: Int, y_e: Int, v: Int): Int = {
     if (x_e + v == x_s && y_e - v == y_s)
-      0
+      0//left up
     else if (x_e - v == x_s && y_e - v == y_s)
-      1
+      1//right up
     else if (x_e - v == x_s && y_e + v == y_s)
-      2
+      2//right down
     else
-      3
+      3//left down
   }
 
   def moveChecker(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Unit = {
@@ -57,13 +63,13 @@ class Board {
     if (canMove(x_s, y_s, x_e, y_e) && math.abs(y_e - y_s) == 1) {
       val value = tab(x_s)(y_s)
       tab(x_e)(y_e) = value
-      tab(x_s)(y_s) = 0
+      tab(x_s)(y_s) = empty
     }
   }
 
   def canMove(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
     if ((x_s == x_e || y_s == y_e) ||
-        value(x_e, y_e) != 0 || math.abs(y_s - y_e) != math.abs(x_s - x_e))
+        value(x_e, y_e) != empty || math.abs(y_s - y_e) != math.abs(x_s - x_e))
       false
     else
       true
@@ -81,24 +87,24 @@ class Board {
   def strikeOnce(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Unit = {
     if (canStrike(x_s, y_s, x_e, y_e)) {
       tab(x_e)(y_e) = value(x_s, y_s)
-      tab(x_s)(y_s) = 0
-      tab((x_s + x_e) / 2)((y_s + y_e) / 2) = 0
+      tab(x_s)(y_s) = empty
+      tab((x_s + x_e) / 2)((y_s + y_e) / 2) = empty
     }
   }
 
   def canStrikeAgain(x_s: Int, y_s: Int): Boolean = {
     val v = value(x_s, y_s)
-    if ((value(x_s - 1, y_s + 1) == -v && value(x_s - 2, y_s + 2) == 0) ||
-        (value(x_s + 1, y_s + 1) == -v && value(x_s + 2, y_s + 2) == 0) ||
-        (value(x_s + 1, y_s - 1) == -v && value(x_s + 2, y_s - 2) == 0) ||
-        (value(x_s - 1, y_s - 1) == -v && value(x_s - 2, y_s - 2) == 0))
+    if ((value(x_s - 1, y_s + 1) == -v && value(x_s - 2, y_s + 2) == empty) ||
+        (value(x_s + 1, y_s + 1) == -v && value(x_s + 2, y_s + 2) == empty) ||
+        (value(x_s + 1, y_s - 1) == -v && value(x_s + 2, y_s - 2) == empty) ||
+        (value(x_s - 1, y_s - 1) == -v && value(x_s - 2, y_s - 2) == empty))
       true
     else
       false
   }
 
   def isKing(x: Int, y: Int): Boolean = {
-    value(x, y) == 2 || value(x, y) == -2
+    value(x, y) == whiteKing || value(x, y) == blackKing
   }
 
   def canKingMove(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
@@ -130,11 +136,13 @@ class Board {
 
   def onTheWay(inc: Int, x: Int, y: Int, cx: Int, cy: Int): Int = {
     println(math.abs(cx - x))
-    if (value(cx, cy) == 0) {
+    if (value(cx, cy) == empty) {
       println("Adding 0")
       0
     }
-    else if (value(cx, cy) + 1 == -value(x, y) || value(cx, cy) - 1 == -value(x, y)) {
+    else if ((value(x,y) == blackKing && (value(cx,cy) == whiteKing || value(cx,cy) == white))||
+      value(x,y) == whiteKing && (value(cx,cy) == blackKing || value(cx,cy) == black)) {
+
       println("Adding 1")
       1
     }
@@ -145,7 +153,7 @@ class Board {
   }
 
   def canKingStrike(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
-    if (canMove(x_s, y_s, x_e, y_e))
+    if (!canMove(x_s, y_s, x_e, y_e))
       return false
     val inc = math.abs(y_e - y_s)
     val dir = direction(x_s, y_s, x_e, y_e, inc)
@@ -169,7 +177,7 @@ class Board {
   def moveKing(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Unit = {
     if (isKing(x_s, y_s) && canKingMove(x_s, y_s, x_e, y_e)){
       tab(x_e)(y_e) = value(x_s, y_s)
-      tab(x_s)(y_s) = 0
+      tab(x_s)(y_s) = empty
     }
   }
 
@@ -178,10 +186,10 @@ class Board {
       for {
         i <- 1 until math.abs(y_e - y_s)
       } yield {
-        tab(x_e + i)(y_e + i) = 0
+        tab(x_e + i)(y_e + i) = empty
       }
       tab(x_e)(y_e) = value(x_s, y_s)
-      tab(x_s)(y_s) = 0
+      tab(x_s)(y_s) = empty
     }
   }
 
@@ -201,20 +209,23 @@ class Board {
   def printing(x: Int, y: Int): Any = {
     if (value(x, y) == 0)
       '-'
-    else if (value(x, y) == 1)
+    else if (value(x, y) == black)
       'c'
-    else if (value(x, y) == 2)
+    else if (value(x, y) == blackKing)
       'C'
-    else if (value(x, y) == -1)
+    else if (value(x, y) == white)
       'b'
-    else if (value(x, y) == -2)
+    else if (value(x, y) == whiteKing)
       'B'
   }
 
   def drawBoard(): Unit = {
+    println("     0    1    2    3    4    5    6    7\n")
     for {
       i <- 0 until 8
     } yield {
+      print(i)
+      print("    ")
       for {
         j <- 0 until 8
       } yield {
@@ -225,9 +236,5 @@ class Board {
     }
   }
 
-  /*def whereCanStrike(x_s: Int, y_s: Int): Option[List[Int, Int]] = {
-    if ( isChecker(x_s, y_s) )
-      if ( value(x_s - 1, y_s + 1) == -value(x_s, y_s) && value(x_s - 2, y_s + 2) == 0)
-
-  }*/
+  def objectiveFunction():Int = tab(0).sum + tab(1).sum + tab(2).sum + tab(3).sum + tab(4).sum + tab(5).sum + tab(6).sum+ tab(7).sum
 }
