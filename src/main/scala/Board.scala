@@ -145,8 +145,10 @@ class Board {
   }
 
   def canKingStrike(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
-    if (canMove(x_s, y_s, x_e, y_e))
+    if (!canMove(x_s, y_s, x_e, y_e)) {
+      println("Can't move")
       return false
+    }
     val inc = math.abs(y_e - y_s)
     val dir = direction(x_s, y_s, x_e, y_e, inc)
     val res = for{
@@ -160,9 +162,9 @@ class Board {
       else if (dir == 2)
         onTheWay(inc, x_s, y_s, x_s + i, y_s - i)
       else
-          onTheWay(inc, x_s, y_s, x_s - i, y_s - i)
+        onTheWay(inc, x_s, y_s, x_s - i, y_s - i)
     }
-    println(res.sum)
+    println(res)
     res.sum == 1
   }
 
@@ -187,15 +189,27 @@ class Board {
 
   def move(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Unit = {
     if (isChecker(x_s, y_s))
-      if (math.abs(x_s - x_e) == 2)
+      if (math.abs(x_s - x_e) == 2) {
         strikeOnce(x_s, y_s, x_e, y_e)
+        if (canStrikeAgain(x_e, y_e))
+          println("You must strike again, do it!")
+      }
       else
         moveChecker(x_s, y_s, x_e, y_e)
-    else if (isKing(x_s, y_s))
-      if (canKingStrike(x_s, y_s, x_e, y_e))
+    else if (isKing(x_s, y_s)) {
+      val strike = canKingMove(x_s, y_s, x_e, y_e)
+      println(strike)
+      if (!strike) {
+        println("King strike!")
         kingStrike(x_s, y_s, x_e, y_e)
-      else
+      }
+      else {
+        println("King move!")
         moveKing(x_s, y_s, x_e, y_e)
+      }
+    }
+    else
+      println("Error")
   }
 
   def printing(x: Int, y: Int): Any = {

@@ -1,6 +1,6 @@
 object Main extends App {
     val board = new Board
-    board.king(5, 4)
+    //board.king(5, 4)
     //board.king(5, 4)
     //println(board.value(5, 4))
     //board.move(2, 1, 3, 2)
