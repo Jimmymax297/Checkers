@@ -20,9 +20,9 @@ object Checkers extends App {
   board.tab(5)(4) = board.empty
   board.tab(3)(2) = board.white
   board.tab(4)(3) = board.black*/
-  //board.move(2, 1, 3, 2)
+  board.move(2, 1, 3, 2)
   //println(board.value(3, 2))
-  //board.move(5, 4, 4, 3)
+  board.move(5, 4, 4, 3)
   //println(board.value(5, 4))
   //println(board.value(3, 2))
   //board.move(5, 4, 2, 1)
@@ -46,13 +46,15 @@ object Checkers extends App {
     println(board.strikers("black"))
     print("Biale broniace: ")
     println(board.strikers("white"))*/
+    println('BEGIN)
     val l = board.findStrikePath(3, 2, new Movement(List[(Int, Int, Int, Int)]()), board)
     for {
       x <- 0 until l.length
     } yield {
       println(l(x).move)
     }
-    println("Make a move (Correct example: 3 2 4 3)")
+    board.drawBoard()
+    //println("Make a move (Correct example: 3 2 4 3)")
     val in1 = scala.io.StdIn.readInt()
     val in2 = scala.io.StdIn.readInt()
     val in3 = scala.io.StdIn.readInt()
