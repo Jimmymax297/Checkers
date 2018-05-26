@@ -1,5 +1,7 @@
 import java.lang.Cloneable
 
+import scala.collection.mutable.ListBuffer
+
 class Board(t: Array[Array[Int]]) extends Cloneable{
   val white: Int = -1
   val empty: Int = 0
@@ -160,6 +162,156 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       }
     }
     t.flatten.filter(_ != (-1, -1))
+  }
+
+  def findAllStrikePaths(s: String): List[Movement] = {
+    val color = {
+      if (s == "white") white
+      else black
+    }
+    val movements = List(
+      if (value(0 , 1) == color)
+        findStrikePath(0, 1, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(0 , 3) == color)
+        findStrikePath(0, 3, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(0 , 5) == color)
+        findStrikePath(0, 5, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(0 , 7) == color)
+        findStrikePath(0, 7, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(1 , 0) == color)
+        findStrikePath(1, 0, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(1 , 2) == color)
+        findStrikePath(1, 2, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(1 , 4) == color)
+        findStrikePath(1, 4, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(1 , 6) == color)
+        findStrikePath(1, 6, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(2 , 1) == color)
+        findStrikePath(2, 1, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(2 , 3) == color)
+        findStrikePath(2, 3, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(2 , 5) == color)
+        findStrikePath(2, 5, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(2 , 7) == color)
+        findStrikePath(2, 7, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(3 , 0) == color)
+        findStrikePath(3, 0, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(3 , 2) == color)
+        findStrikePath(3, 2, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(3 , 4) == color)
+        findStrikePath(3, 4, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(3 , 6) == color)
+        findStrikePath(3, 6, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(4 , 1) == color)
+        findStrikePath(4, 1, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(4 , 3) == color)
+        findStrikePath(4, 3, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(4 , 5) == color)
+        findStrikePath(4, 5, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(4 , 7) == color)
+        findStrikePath(4, 7, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(5 , 0) == color)
+        findStrikePath(5, 0, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(5 , 2) == color)
+        findStrikePath(5, 2, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(5 , 4) == color)
+        findStrikePath(5, 4, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(5 , 6) == color)
+        findStrikePath(5, 6, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(6 , 1) == color)
+        findStrikePath(6, 1, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(6 , 3) == color)
+        findStrikePath(6, 3, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(6 , 5) == color)
+        findStrikePath(6, 5, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(6 , 7) == color)
+        findStrikePath(6, 7, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(7 , 0) == color)
+        findStrikePath(7, 0, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(7 , 2) == color)
+        findStrikePath(7, 2, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(7 , 4) == color)
+        findStrikePath(7, 4, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement](),
+      if (value(7 , 6) == color)
+        findStrikePath(7, 6, new Movement(List[(Int, Int, Int, Int)]()), this)
+      else
+        List[Movement]()
+    )
+    movements.flatten
+  }
+
+  def biggestStrikePath(s: String): List[Movement] = {
+    val l = findAllStrikePaths(s)
+    val lengthList = l.map(_.move.length)
+    if (lengthList.nonEmpty) {
+      val maxLength = lengthList.max
+      l.filter(_.move.length == maxLength)
+    }
+    else {
+      List[Movement]()
+    }
   }
 
   def findStrikePath(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
@@ -442,6 +594,19 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       println("can't move ")
       println(x_s, y_s, x_e, y_e)
       false
+    }
+  }
+
+  def executeMovement(m: Movement): Unit = {
+    for {
+      i <- 0 until m.move.length
+    } yield {
+      val x1 = m.move(i)._1
+      val y1 = m.move(i)._2
+      val x2 = m.move(i)._3
+      val y2 = m.move(i)._4
+      println(x1, y1 , x2, y2)
+      move(x1,y1,x2,y2)
     }
   }
 
