@@ -4,7 +4,7 @@ object Checkers extends App {
   val black: Int = 1
   val whiteKing: Int = -2
   val blackKing: Int = 2
-  val t = Array(
+  /*val t = Array(
     Array(empty, black, empty, black, empty, black, empty, black),
     Array(black, empty, black, empty, black, empty, black, empty),
     Array(empty, black, empty, black, empty, black, empty, black),
@@ -12,8 +12,8 @@ object Checkers extends App {
     Array(empty, empty, empty, empty, empty, empty, empty, empty),
     Array(white, empty, white, empty, white, empty, white, empty),
     Array(empty, white, empty, white, empty, white, empty, white),
-    Array(white, empty, white, empty, white, empty, white, empty))
-  /*val t = Array(
+    Array(white, empty, white, empty, white, empty, white, empty))*/
+  val t = Array(
   Array(empty, black, empty, empty, empty, empty, empty, empty),
   Array(empty, empty, white, empty, empty, empty, empty, empty),
   Array(empty, empty, empty, empty, empty, empty, empty, empty),
@@ -22,7 +22,7 @@ object Checkers extends App {
   Array(empty, empty, white, empty, white, empty, empty, empty),
   Array(empty, empty, empty, empty, empty, empty, empty, empty),
   Array(empty, empty, empty, empty, empty, empty, empty, empty)
-  )*/
+  )
   val board = new Board(t)
 
   println("Choose color (white/black")
@@ -46,7 +46,6 @@ object Checkers extends App {
     } yield {
       println(nigger(x).move)
     }*/
-    chooseStrike(read)
     val in1 = scala.io.StdIn.readInt()
     val in2 = scala.io.StdIn.readInt()
     val in3 = scala.io.StdIn.readInt()
@@ -59,14 +58,16 @@ object Checkers extends App {
     val possibleStrike = board.biggestStrikePath(c)
     if (possibleStrike.nonEmpty) {
       println("Possible strikes:")
+      val len = possibleStrike.length
       for {
-        x <- 0 until possibleStrike.length
+        x <- 0 until len
       } yield {
         println(x + 1 + ":  " + possibleStrike(x).move)
         }
       val chosenMovement = scala.io.StdIn.readInt()
       //println(possibleStrike(chosenMovement - 1).move)
       board.executeMovement(possibleStrike(chosenMovement - 1))
+      board.drawBoard()
       }
     }
 }

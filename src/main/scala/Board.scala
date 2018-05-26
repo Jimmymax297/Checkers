@@ -100,7 +100,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
 
   def canStrikeOnce(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
     if (isChecker(x_s, y_s) && canMove(x_s, y_s, x_e, y_e) && value((x_s + x_e) / 2, (y_s + y_e) / 2) == -value(x_s, y_s)) {
-      //println("canStrike")
+      println("canStrike")
       true
     }
     else
@@ -109,9 +109,11 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
 
   def strikeOnce(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Unit = {
     if (canStrikeOnce(x_s, y_s, x_e, y_e)) {
+      println("striking for real")
       tab(x_e)(y_e) = value(x_s, y_s)
       tab(x_s)(y_s) = empty
       tab((x_s + x_e) / 2)((y_s + y_e) / 2) = empty
+
     }
   }
 
@@ -567,16 +569,18 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   def move(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
     if (isChecker(x_s, y_s))
       if (math.abs(x_s - x_e) == 2) {
+        println("striking" , x_s, y_s,x_e,y_e)
         strikeOnce(x_s, y_s, x_e, y_e)
 //        if (canStrike(x_e, y_e))
 //          println("You must strike again, do it!")
         true
       }
       else {
+        println("moving" , x_s, y_s,x_e,y_e)
         moveChecker(x_s, y_s, x_e, y_e)
         true
       }
-    else if (isKing(x_s, y_s)) {
+    /*else if (isKing(x_s, y_s)) {
       val strike = canKingStrike(x_s, y_s, x_e, y_e)
       println(strike)
       if (strike) {
@@ -589,7 +593,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
         moveKing(x_s, y_s, x_e, y_e)
         true
       }
-    }
+    }*/
     else{
       println("can't move ")
       println(x_s, y_s, x_e, y_e)
@@ -598,8 +602,9 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   }
 
   def executeMovement(m: Movement): Unit = {
+    val len =  m.move.length
     for {
-      i <- 0 until m.move.length
+      i <- 0 until len
     } yield {
       val x1 = m.move(i)._1
       val y1 = m.move(i)._2
