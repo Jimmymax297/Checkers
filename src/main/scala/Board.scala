@@ -1,10 +1,13 @@
-class Board {
-  val white = -1
-  val empty = 0
-  val black = 1
-  val whiteKing = -2
-  val blackKing = 2
-  val tab:Array[Array[Int]] = {
+import java.lang.Cloneable
+
+class Board(t: Array[Array[Int]]) extends Cloneable{
+  val white: Int = -1
+  val empty: Int = 0
+  val black: Int = 1
+  val whiteKing: Int = -2
+  val blackKing: Int = 2
+  val tab:Array[Array[Int]] = t
+  /*{
     val t = Array(
       Array(empty, black, empty, black, empty, black, empty, black),
       Array(black, empty, black, empty, black, empty, black, empty),
@@ -15,7 +18,25 @@ class Board {
       Array(empty, white, empty, white, empty, white, empty, white),
       Array(white, empty, white, empty, white, empty, white, empty))
     t
-  }
+  }*/
+
+  /*(def this(other: Board) {
+    this
+    val this.white = -1
+    val this.empty = 0
+    val this.black = 1
+    val this.whiteKing = -2
+    val this.blackKing = 2
+    val this.tab = Array(
+  Array(empty, other.tab(0)(1), empty, other.tab(0)(3), empty, other.tab(0)(5), empty, other.tab(0)(7)),
+  Array(other.tab(1)(0), empty, other.tab(1)(2), empty, other.tab(1)(4), empty, other.tab(1)(6), empty),
+  Array(empty, other.tab(2)(1), empty, other.tab(2)(3), empty, other.tab(2)(5), empty, other.tab(2)(7)),
+  Array(other.tab(3)(0), empty, other.tab(3)(2), empty, other.tab(3)(4), empty, other.tab(3)(6), empty),
+  Array(empty, other.tab(4)(1), empty, other.tab(4)(3), empty, other.tab(4)(5), empty, other.tab(4)(7)),
+  Array(other.tab(5)(0), empty, other.tab(5)(2), empty, other.tab(5)(4), empty, other.tab(5)(6), empty),
+  Array(empty, other.tab(6)(1), empty, other.tab(6)(3), empty, other.tab(6)(5), empty, other.tab(6)(7)),
+  Array(other.tab(7)(0), empty, other.tab(7)(2), empty, other.tab(7)(4), empty, other.tab(7)(6), empty))
+  }*/
 
   def isChecker(x: Int, y: Int): Boolean = {
     if(tab(x)(y) == white || tab(x)(y) == black)
@@ -36,14 +57,14 @@ class Board {
         change(x, y, whiteKing)
   }
 
-  def color(x: Int, y: Int): Any = {
+  def color(x: Int, y: Int): Int = {
     if (value(x, y) == empty)
-      "board"
+      empty
     else {
       if (value(x, y) == white || value(x, y) == whiteKing)
-        "white"
+        white
       else
-        "black"
+        black
     }
   }
 
@@ -92,15 +113,174 @@ class Board {
     }
   }
 
-  def canStrikeAgain(x_s: Int, y_s: Int): Boolean = {
+  def canStrike(x_s: Int, y_s: Int): Boolean = {
     val v = value(x_s, y_s)
-    if ((value(x_s - 1, y_s + 1) == -v && value(x_s - 2, y_s + 2) == empty) ||
-        (value(x_s + 1, y_s + 1) == -v && value(x_s + 2, y_s + 2) == empty) ||
-        (value(x_s + 1, y_s - 1) == -v && value(x_s + 2, y_s - 2) == empty) ||
-        (value(x_s - 1, y_s - 1) == -v && value(x_s - 2, y_s - 2) == empty))
+    /*if(x_s - 1 >=0 && y_s + 1 <= 7 && x_s - 2 >= 0 && y_s + 2 <= 7)//lewo dol
+      value(x_s - 1, y_s + 1) == -v && value(x_s - 2, y_s + 2) == empty
+    if(x_s + 1 <= 7 && y_s + 1 <= 7 && x_s + 2 <= 7 && y_s + 2 <= 7)//prawo dol
+      value(x_s + 1, y_s + 1) == -v && value(x_s + 2, y_s + 2) == empty
+    if(x_s + 1 <= 7 && y_s - 1 >= 0 && x_s + 2 <= 7 && y_s - 2 >= 0)//prawo gora
+      value(x_s + 1, y_s - 1) == -v && value(x_s + 2, y_s - 2) == empty
+    if(x_s - 1 >= 0 && y_s - 1 >= 0 && x_s - 2 >= 7 && y_s - 2 >= 0)//lewo gora
+      value(x_s - 1, y_s - 1) == -v && value(x_s - 2, y_s - 2) == empty
+    false*/
+    if(
+      ((x_s - 1 >=0 && y_s + 1 <= 7 && x_s - 2 >= 0 && y_s + 2 <= 7)&&
+        (value(x_s - 1, y_s + 1) == -v && value(x_s - 2, y_s + 2) == empty)) //lewo dol
+      ||
+      ((x_s + 1 <= 7 && y_s + 1 <= 7 && x_s + 2 <= 7 && y_s + 2 <= 7)&&
+        (value(x_s + 1, y_s + 1) == -v && value(x_s + 2, y_s + 2) == empty)) //prawo dol
+      ||
+      ((x_s + 1 <= 7 && y_s - 1 >= 0 && x_s + 2 <= 7 && y_s - 2 >= 0)&&
+        (value(x_s + 1, y_s - 1) == -v && value(x_s + 2, y_s - 2) == empty)) //prawo gora
+      ||
+      ((x_s - 1 >= 0 && y_s - 1 >= 0 && x_s - 2 >= 0 && y_s - 2 >= 0)&&
+        (value(x_s - 1, y_s - 1) == -v && value(x_s - 2, y_s - 2) == empty)) //lewo gora
+    )
       true
     else
       false
+  }
+
+  def strikers(c: String): IndexedSeq[(Int, Int)] = {
+    val col = if (c == "white")
+      white
+    else
+      black
+    val t: IndexedSeq[IndexedSeq[(Int, Int)]] = for {
+      x <- 0 to 7
+    } yield {
+      for {
+       y <- 0 to 7
+      } yield {
+        if((isChecker(x, y) || isKing(x, y)) && canStrike(x, y) && col == color(x, y))
+          (x, y)
+        else
+          (-1, -1)
+      }
+    }
+    t.flatten.filter(_ != (-1, -1))
+  }
+
+  def findStrikePath(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
+    /*val v = value(x, y)
+
+    if ((x - 1 >=0 && y + 1 <= 7 && x - 2 >= 0 && y + 2 <= 7)&&
+      (value(x - 1, y + 1) == -v && value(x - 2, y + 2) == empty)) {
+      findStrikePath(x - 2, y + 2, new Movement(m.move :+ (x, y, x - 2, y + 2)))
+    }
+    if ((x + 1 <= 7 && y + 1 <= 7 && x + 2 <= 7 && y + 2 <= 7)&&
+      (value(x + 1, y + 1) == -v && value(x + 2, y + 2) == empty)) {
+      findStrikePath(x + 2, y + 2, new Movement(m.move :+ (x, y, x + 2, y + 2)))
+    }
+    if ((x + 1 <= 7 && y - 1 >= 0 && x + 2 <= 7 && y - 2 >= 0)&&
+      (value(x + 1, y - 1) == -v && value(x + 2, y - 2) == empty)) {
+      findStrikePath(x + 2, y - 2, new Movement(m.move :+ (x, y, x + 2, y - 2)))
+    }
+    if ((x - 1 >= 0 && y - 1 >= 0 && x - 2 >= 0 && y - 2 >= 0)&&
+      (value(x - 1, y - 1) == -v && value(x - 2, y - 2) == empty)) {
+      findStrikePath(x - 2, y - 2, new Movement(m.move :+ (x, y, x - 2, y - 2)))
+    }*/
+    b.drawBoard()
+    println("findStrikePath")
+    val listOfLists :List[List[Movement]] = List (findStrikeLeftDown(x,y,m,b),findStrikeRightDown(x,y,m,b),findStrikeRightUp(x,y,m,b),findStrikeLeftUp(x,y,m,b))
+    listOfLists.filter(_.nonEmpty).flatten
+  }
+
+  def findStrikeLeftDown(x: Int, y: Int, m: Movement, b: Board): List[Movement] ={
+    val v = value(x, y)
+    if ((x - 1 >=0 && y + 1 <= 7 && x - 2 >= 0 && y + 2 <= 7)&&
+      (value(x - 1, y + 1) == -v && value(x - 2, y + 2) == empty)) {
+      println("findStrikeLeftDown")
+      //val board = new Board(b)
+      val newTab = Array(
+        Array(empty, b.tab(0)(1), empty, b.tab(0)(3), empty, b.tab(0)(5), empty, b.tab(0)(7)),
+        Array(b.tab(1)(0), empty, b.tab(1)(2), empty, b.tab(1)(4), empty, b.tab(1)(6), empty),
+        Array(empty, b.tab(2)(1), empty, b.tab(2)(3), empty, b.tab(2)(5), empty, b.tab(2)(7)),
+        Array(b.tab(3)(0), empty, b.tab(3)(2), empty, b.tab(3)(4), empty, b.tab(3)(6), empty),
+        Array(empty, b.tab(4)(1), empty, b.tab(4)(3), empty, b.tab(4)(5), empty, b.tab(4)(7)),
+        Array(b.tab(5)(0), empty, b.tab(5)(2), empty, b.tab(5)(4), empty, b.tab(5)(6), empty),
+        Array(empty, b.tab(6)(1), empty, b.tab(6)(3), empty, b.tab(6)(5), empty, b.tab(6)(7)),
+        Array(b.tab(7)(0), empty, b.tab(7)(2), empty, b.tab(7)(4), empty, b.tab(7)(6), empty))
+      val board = new Board(newTab)
+      //val board = b.clone.asInstanceOf[Board]
+      board.move(x, y, x - 2, y + 2)
+      findStrikePath(x - 2, y + 2, new Movement(m.move :+ (x, y, x - 2, y + 2)), board)
+    }
+    else
+      List[Movement](m)
+  }
+
+  def findStrikeRightDown(x: Int, y: Int, m: Movement, b: Board): List[Movement] ={
+    val v = value(x, y)
+    if ((x + 1 <= 7 && y + 1 <= 7 && x + 2 <= 7 && y + 2 <= 7)&&
+      (value(x + 1, y + 1) == -v && value(x + 2, y + 2) == empty)) {
+      println("findStrikeRightDown")
+      //val board = new Board(b)
+      //val board = b.clone.asInstanceOf[Board]
+      val newTab = Array(
+        Array(empty, b.tab(0)(1), empty, b.tab(0)(3), empty, b.tab(0)(5), empty, b.tab(0)(7)),
+        Array(b.tab(1)(0), empty, b.tab(1)(2), empty, b.tab(1)(4), empty, b.tab(1)(6), empty),
+        Array(empty, b.tab(2)(1), empty, b.tab(2)(3), empty, b.tab(2)(5), empty, b.tab(2)(7)),
+        Array(b.tab(3)(0), empty, b.tab(3)(2), empty, b.tab(3)(4), empty, b.tab(3)(6), empty),
+        Array(empty, b.tab(4)(1), empty, b.tab(4)(3), empty, b.tab(4)(5), empty, b.tab(4)(7)),
+        Array(b.tab(5)(0), empty, b.tab(5)(2), empty, b.tab(5)(4), empty, b.tab(5)(6), empty),
+        Array(empty, b.tab(6)(1), empty, b.tab(6)(3), empty, b.tab(6)(5), empty, b.tab(6)(7)),
+        Array(b.tab(7)(0), empty, b.tab(7)(2), empty, b.tab(7)(4), empty, b.tab(7)(6), empty))
+      val board = new Board(newTab)
+      board.move(x, y, x + 2, y + 2)
+      findStrikePath(x + 2, y + 2, new Movement(m.move :+ (x, y, x + 2, y + 2)), board)
+    }
+    else
+      List[Movement](m)
+  }
+
+  def findStrikeRightUp(x: Int, y: Int, m: Movement, b: Board): List[Movement] ={
+    val v = value(x, y)
+    if ((x + 1 <= 7 && y - 1 >= 0 && x + 2 <= 7 && y - 2 >= 0)&&
+      (value(x + 1, y - 1) == -v && value(x + 2, y - 2) == empty)) {
+      println("findStrikeRightUp")
+      //val board = new Board(b)
+      //val board = b.clone.asInstanceOf[Board]
+      val newTab = Array(
+        Array(empty, b.tab(0)(1), empty, b.tab(0)(3), empty, b.tab(0)(5), empty, b.tab(0)(7)),
+        Array(b.tab(1)(0), empty, b.tab(1)(2), empty, b.tab(1)(4), empty, b.tab(1)(6), empty),
+        Array(empty, b.tab(2)(1), empty, b.tab(2)(3), empty, b.tab(2)(5), empty, b.tab(2)(7)),
+        Array(b.tab(3)(0), empty, b.tab(3)(2), empty, b.tab(3)(4), empty, b.tab(3)(6), empty),
+        Array(empty, b.tab(4)(1), empty, b.tab(4)(3), empty, b.tab(4)(5), empty, b.tab(4)(7)),
+        Array(b.tab(5)(0), empty, b.tab(5)(2), empty, b.tab(5)(4), empty, b.tab(5)(6), empty),
+        Array(empty, b.tab(6)(1), empty, b.tab(6)(3), empty, b.tab(6)(5), empty, b.tab(6)(7)),
+        Array(b.tab(7)(0), empty, b.tab(7)(2), empty, b.tab(7)(4), empty, b.tab(7)(6), empty))
+      val board = new Board(newTab)
+      board.move(x, y, x + 2, y - 2)
+      findStrikePath(x + 2, y - 2, new Movement(m.move :+ (x, y, x + 2, y - 2)), board)
+    }
+    else
+      List[Movement](m)
+  }
+
+  def findStrikeLeftUp(x: Int, y: Int, m: Movement, b: Board): List[Movement] ={
+    val v = value(x, y)
+    if ((x - 1 >= 0 && y - 1 >= 0 && x - 2 >= 0 && y - 2 >= 0)&&
+      (value(x - 1, y - 1) == -v && value(x - 2, y - 2) == empty)) {
+      println("findStrikeLeftUp")
+      //val board = new Board(b)
+      //val board = b.clone.asInstanceOf[Board]
+      val newTab = Array(
+        Array(empty, b.tab(0)(1), empty, b.tab(0)(3), empty, b.tab(0)(5), empty, b.tab(0)(7)),
+        Array(b.tab(1)(0), empty, b.tab(1)(2), empty, b.tab(1)(4), empty, b.tab(1)(6), empty),
+        Array(empty, b.tab(2)(1), empty, b.tab(2)(3), empty, b.tab(2)(5), empty, b.tab(2)(7)),
+        Array(b.tab(3)(0), empty, b.tab(3)(2), empty, b.tab(3)(4), empty, b.tab(3)(6), empty),
+        Array(empty, b.tab(4)(1), empty, b.tab(4)(3), empty, b.tab(4)(5), empty, b.tab(4)(7)),
+        Array(b.tab(5)(0), empty, b.tab(5)(2), empty, b.tab(5)(4), empty, b.tab(5)(6), empty),
+        Array(empty, b.tab(6)(1), empty, b.tab(6)(3), empty, b.tab(6)(5), empty, b.tab(6)(7)),
+        Array(b.tab(7)(0), empty, b.tab(7)(2), empty, b.tab(7)(4), empty, b.tab(7)(6), empty))
+      val board = new Board(newTab)
+      board.move(x, y, x - 2, y - 2)
+      findStrikePath(x - 2, y - 2, new Movement(m.move :+ (x, y, x - 2, y - 2)), board)
+    }
+    else
+      List[Movement](m)
   }
 
   def isKing(x: Int, y: Int): Boolean = {
@@ -195,29 +375,34 @@ class Board {
     }
   }
 
-  def move(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Unit = {
+  def move(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
     if (isChecker(x_s, y_s))
       if (math.abs(x_s - x_e) == 2) {
         strikeOnce(x_s, y_s, x_e, y_e)
-        if (canStrikeAgain(x_e, y_e))
+        if (canStrike(x_e, y_e))
           println("You must strike again, do it!")
+        true
       }
-      else
+      else {
         moveChecker(x_s, y_s, x_e, y_e)
+        true
+      }
     else if (isKing(x_s, y_s)) {
-      val strike = canKingMove(x_s, y_s, x_e, y_e)
+      val strike = canKingStrike(x_s, y_s, x_e, y_e)
       println(strike)
-      if (!strike) {
+      if (strike) {
         println("King strike!")
         kingStrike(x_s, y_s, x_e, y_e)
+        true
       }
       else {
         println("King move!")
         moveKing(x_s, y_s, x_e, y_e)
+        true
       }
     }
     else
-      println("Error")
+      false
   }
 
   def printing(x: Int, y: Int): Any = {
