@@ -83,7 +83,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
 
   def moveChecker(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Unit = {
     println(math.abs(y_e - y_s))
-    if (canMove(x_s, y_s, x_e, y_e) && math.abs(y_e - y_s) == 1) {
+    if (canMove(x_s, y_s, x_e, y_e) && math.abs(y_e - y_s) == 1 && canMoveForward(x_s, y_s, x_e, y_e)) {
       val value = tab(x_s)(y_s)
       tab(x_e)(y_e) = value
       tab(x_s)(y_s) = empty
@@ -96,6 +96,15 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       false
     else
       true
+  }
+
+  def canMoveForward(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
+    if (value(x_s, y_s) == white && x_e < x_s && (y_e < y_s || y_e > y_s))
+      true
+    else if (value(x_s, y_s) == black && x_e > x_s && (y_e < y_s || y_e > y_s))
+      true
+    else
+      false
   }
 
   def canStrikeOnce(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
@@ -315,6 +324,12 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       List[Movement]()
     }
   }
+
+  /*def findMovePath(x: Int, y: Int): List[Movement] = {
+    if(isChecker(x, y)) {
+
+    }
+  }*/
 
   def findStrikePath(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
     /*val v = value(x, y)
