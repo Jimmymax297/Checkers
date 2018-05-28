@@ -9,36 +9,6 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   val whiteKing: Int = -2
   val blackKing: Int = 2
   val tab:Array[Array[Int]] = t
-  /*{
-    val t = Array(
-      Array(empty, black, empty, black, empty, black, empty, black),
-      Array(black, empty, black, empty, black, empty, black, empty),
-      Array(empty, black, empty, black, empty, black, empty, black),
-      Array(empty, empty, empty, empty, empty, empty, empty, empty),
-      Array(empty, empty, empty, empty, empty, empty, empty, empty),
-      Array(white, empty, white, empty, white, empty, white, empty),
-      Array(empty, white, empty, white, empty, white, empty, white),
-      Array(white, empty, white, empty, white, empty, white, empty))
-    t
-  }*/
-
-  /*(def this(other: Board) {
-    this
-    val this.white = -1
-    val this.empty = 0
-    val this.black = 1
-    val this.whiteKing = -2
-    val this.blackKing = 2
-    val this.tab = Array(
-  Array(empty, other.tab(0)(1), empty, other.tab(0)(3), empty, other.tab(0)(5), empty, other.tab(0)(7)),
-  Array(other.tab(1)(0), empty, other.tab(1)(2), empty, other.tab(1)(4), empty, other.tab(1)(6), empty),
-  Array(empty, other.tab(2)(1), empty, other.tab(2)(3), empty, other.tab(2)(5), empty, other.tab(2)(7)),
-  Array(other.tab(3)(0), empty, other.tab(3)(2), empty, other.tab(3)(4), empty, other.tab(3)(6), empty),
-  Array(empty, other.tab(4)(1), empty, other.tab(4)(3), empty, other.tab(4)(5), empty, other.tab(4)(7)),
-  Array(other.tab(5)(0), empty, other.tab(5)(2), empty, other.tab(5)(4), empty, other.tab(5)(6), empty),
-  Array(empty, other.tab(6)(1), empty, other.tab(6)(3), empty, other.tab(6)(5), empty, other.tab(6)(7)),
-  Array(other.tab(7)(0), empty, other.tab(7)(2), empty, other.tab(7)(4), empty, other.tab(7)(6), empty))
-  }*/
 
   def isChecker(x: Int, y: Int): Boolean = {
     if(tab(x)(y) == white || tab(x)(y) == black)
@@ -119,15 +89,6 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
 
   def canStrike(x_s: Int, y_s: Int): Boolean = {
     val v = value(x_s, y_s)
-    /*if(x_s - 1 >=0 && y_s + 1 <= 7 && x_s - 2 >= 0 && y_s + 2 <= 7)//lewo dol
-      value(x_s - 1, y_s + 1) == -v && value(x_s - 2, y_s + 2) == empty
-    if(x_s + 1 <= 7 && y_s + 1 <= 7 && x_s + 2 <= 7 && y_s + 2 <= 7)//prawo dol
-      value(x_s + 1, y_s + 1) == -v && value(x_s + 2, y_s + 2) == empty
-    if(x_s + 1 <= 7 && y_s - 1 >= 0 && x_s + 2 <= 7 && y_s - 2 >= 0)//prawo gora
-      value(x_s + 1, y_s - 1) == -v && value(x_s + 2, y_s - 2) == empty
-    if(x_s - 1 >= 0 && y_s - 1 >= 0 && x_s - 2 >= 7 && y_s - 2 >= 0)//lewo gora
-      value(x_s - 1, y_s - 1) == -v && value(x_s - 2, y_s - 2) == empty
-    false*/
     if(
       ((x_s - 1 >=0 && y_s + 1 <= 7 && x_s - 2 >= 0 && y_s + 2 <= 7)&&
         (value(x_s - 1, y_s + 1) == -v && value(x_s - 2, y_s + 2) == empty)) //lewo dol
@@ -317,53 +278,17 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   }
 
   def findStrikePath(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
-    /*val v = value(x, y)
-
-    if ((x - 1 >=0 && y + 1 <= 7 && x - 2 >= 0 && y + 2 <= 7)&&
-      (value(x - 1, y + 1) == -v && value(x - 2, y + 2) == empty)) {
-      findStrikePath(x - 2, y + 2, new Movement(m.move :+ (x, y, x - 2, y + 2)))
-    }
-    if ((x + 1 <= 7 && y + 1 <= 7 && x + 2 <= 7 && y + 2 <= 7)&&
-      (value(x + 1, y + 1) == -v && value(x + 2, y + 2) == empty)) {
-      findStrikePath(x + 2, y + 2, new Movement(m.move :+ (x, y, x + 2, y + 2)))
-    }
-    if ((x + 1 <= 7 && y - 1 >= 0 && x + 2 <= 7 && y - 2 >= 0)&&
-      (value(x + 1, y - 1) == -v && value(x + 2, y - 2) == empty)) {
-      findStrikePath(x + 2, y - 2, new Movement(m.move :+ (x, y, x + 2, y - 2)))
-    }
-    if ((x - 1 >= 0 && y - 1 >= 0 && x - 2 >= 0 && y - 2 >= 0)&&
-      (value(x - 1, y - 1) == -v && value(x - 2, y - 2) == empty)) {
-      findStrikePath(x - 2, y - 2, new Movement(m.move :+ (x, y, x - 2, y - 2)))
-    }*/
     if(b.value(x,y)==0)
       return List[Movement](m)
 
-//    b.drawBoard()
-//    println("findStrikePath")
-    /*val listOfLists :List[List[Movement]] = List (
-      List[Movement](m) ++ findStrikeLeftDown(x,y,m,b),
-      List[Movement](m) ++ findStrikeRightDown(x,y,m,b),
-      List[Movement](m) ++ findStrikeRightUp(x,y,m,b),
-      List[Movement](m) ++ findStrikeLeftUp(x,y,m,b))
-    */
-
     val list = List[Movement](m) ++ findStrikeLeftDown(x,y,m,b) ++ findStrikeRightDown(x,y,m,b) ++ findStrikeRightUp(x,y,m,b) ++ findStrikeLeftUp(x,y,m,b)
     list.filter(_.move.nonEmpty)
-    //return listOfLists.flatten.filter(_.move.nonEmpty)
   }
 
   def findStrikeLeftDown(x: Int, y: Int, m: Movement, b: Board): List[Movement] ={
     val v = b.value(x, y)
-//    println("findStrikeLeftDown")
-//    print(x)
-//    print(" ")
-//    print(y)
-//    print("\n")
-//    b.drawBoard()
     if ((x - 1 >=0 && y + 1 <= 7 && x - 2 >= 0 && y + 2 <= 7)&&
       (b.value(x - 1, y + 1) == -v && b.value(x - 2, y + 2) == empty)) {
-//      println("IN")
-//      println("color: ",v,"enemy: ",b.value(x-1,y+1),"target: ",b.value(x-2,y+2))
       val newTab = Array(
         Array(empty, b.tab(0)(1), empty, b.tab(0)(3), empty, b.tab(0)(5), empty, b.tab(0)(7)),
         Array(b.tab(1)(0), empty, b.tab(1)(2), empty, b.tab(1)(4), empty, b.tab(1)(6), empty),
@@ -374,7 +299,6 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
         Array(empty, b.tab(6)(1), empty, b.tab(6)(3), empty, b.tab(6)(5), empty, b.tab(6)(7)),
         Array(b.tab(7)(0), empty, b.tab(7)(2), empty, b.tab(7)(4), empty, b.tab(7)(6), empty))
       val board = new Board(newTab)
-      //val board = b.clone.asInstanceOf[Board]
       board.move(x, y, x - 2, y + 2)
       findStrikePath(x - 2, y + 2, new Movement(m.move :+ (x, y, x - 2, y + 2)), board)
     }
@@ -386,12 +310,6 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
 
   def findStrikeRightDown(x: Int, y: Int, m: Movement, b: Board): List[Movement] ={
     val v = b.value(x, y)
-//    println("findStrikeRightDown")
-//    print(x)
-//    print(" ")
-//    print(y)
-//    print("\n")
-//    b.drawBoard()
     if ((x + 1 <= 7 && y + 1 <= 7 && x + 2 <= 7 && y + 2 <= 7)&&
       (b.value(x + 1, y + 1) == -v && b.value(x + 2, y + 2) == empty)) {
 //      println("IN")
@@ -645,5 +563,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
     }
   }
 
-  def objectiveFunction():Int = tab(0).sum + tab(1).sum + tab(2).sum + tab(3).sum + tab(4).sum + tab(5).sum + tab(6).sum+ tab(7).sum
+  def objectiveFunction:Int = tab(0).sum + tab(1).sum + tab(2).sum + tab(3).sum + tab(4).sum + tab(5).sum + tab(6).sum+ tab(7).sum
+
+
 }
