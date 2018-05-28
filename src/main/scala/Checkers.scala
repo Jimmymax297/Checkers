@@ -1,4 +1,3 @@
-
 object Checkers extends App {
   //declartion and definitions
   val white: Int = -1
@@ -90,8 +89,9 @@ object Checkers extends App {
       System.exit(1)
   }
 
-  def chooseStrike(c: String): Unit = {
+  def chooseMove(c: String): Unit = {
     val possibleStrike = board.biggestStrikePath(c)
+    val possibleMove = board.findAllMovePaths(c)
     if (possibleStrike.nonEmpty) {
       println("Possible strikes:")
       val len = possibleStrike.length
@@ -101,7 +101,20 @@ object Checkers extends App {
         println(x + 1 + ":  " + possibleStrike(x).move)
       }
       val chosenMovement = scala.io.StdIn.readInt()
+      //println(possibleStrike(chosenMovement - 1).move)
       board.executeMovement(possibleStrike(chosenMovement - 1))
+      board.drawBoard()
+      }
+    else if (possibleMove.nonEmpty) {
+      println("Possible moves:")
+      val len = possibleMove.length
+      for {
+        x <- 0 until len
+      } yield {
+        println(x + 1 + ": " + possibleMove(x).move)
+      }
+      val chosenMove = scala.io.StdIn.readInt()
+      board.executeMovement(possibleMove(chosenMove - 1))
       board.drawBoard()
     }
   }

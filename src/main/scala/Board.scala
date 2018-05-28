@@ -53,7 +53,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
 
   def moveChecker(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Unit = {
     println(math.abs(y_e - y_s))
-    if (canMove(x_s, y_s, x_e, y_e) && math.abs(y_e - y_s) == 1) {
+    if (canMove(x_s, y_s, x_e, y_e) && math.abs(y_e - y_s) == 1 && canMoveForward(x_s, y_s, x_e, y_e)) {
       val value = tab(x_s)(y_s)
       tab(x_e)(y_e) = value
       tab(x_s)(y_s) = empty
@@ -66,6 +66,15 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       false
     else
       true
+  }
+
+  def canMoveForward(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
+    if (canMove(x_s, y_s, x_e, y_e) && value(x_s, y_s) == white && x_e < x_s && (y_e < y_s || y_e > y_s))
+        true
+    else if (canMove(x_s, y_s, x_e, y_e) && value(x_s, y_s) == black && x_e > x_s && (y_e < y_s || y_e > y_s))
+      true
+    else
+        false
   }
 
   def canStrikeOnce(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
@@ -275,6 +284,182 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
     else {
       List[Movement]()
     }
+  }
+
+  def findMovePath(x: Int, y: Int): List[Movement] = {
+    val list = List[Movement](
+      if (isChecker(x, y)
+        && x - 1 >= 0 && y + 1 <= 7
+        && canMoveForward(x, y, x - 1, y + 1)) { //lewo dol {
+          println("canMove && canForward prawo gora")
+          new Movement(List((x, y, x - 1, y + 1)))
+        }
+        else
+          new Movement(List()),
+      if (isChecker(x, y)
+        &&x + 1 <= 7 && y + 1 <= 7
+        && canMoveForward(x, y, x + 1, y + 1)) {
+          println("canMove && canForward prawo dol")
+          new Movement(List((x, y, x + 1, y + 1)))
+        }
+        else
+          new Movement(List()),
+      if (isChecker(x, y)
+        &&x + 1 <= 7 && y - 1 >= 0
+        && canMoveForward(x, y, x + 1, y - 1)) {
+          println("canMove && canForward lewo dol")
+          new Movement(List((x, y, x + 1, y - 1)))
+        }
+        else
+          new Movement(List()),
+    if (isChecker(x, y)
+        && x - 1 >= 0 && y - 1 >= 0
+        && canMoveForward(x, y, x - 1, y - 1)) {
+          println("canMove && canForward lewo gora")
+          new Movement(List((x, y, x - 1, y - 1)))
+        }
+        else
+          new Movement(List())
+    )
+    list
+  }
+
+  def findAllMovePaths(s: String): List[Movement] = {
+    val color = {
+      if (s == "white") white
+      else black
+    }
+    val movements = List(
+      if (value(0 , 1) == color)
+        findMovePath(0, 1)
+      else
+        List[Movement](),
+      if (value(0 , 3) == color)
+        findMovePath(0, 3)
+      else
+        List[Movement](),
+      if (value(0 , 5) == color)
+        findMovePath(0, 5)
+      else
+        List[Movement](),
+      if (value(0 , 7) == color)
+        findMovePath(0, 7)
+      else
+        List[Movement](),
+      if (value(1 , 0) == color)
+        findMovePath(1, 0)
+      else
+        List[Movement](),
+      if (value(1 , 2) == color)
+        findMovePath(1, 2)
+      else
+        List[Movement](),
+      if (value(1 , 4) == color)
+        findMovePath(1, 4)
+      else
+        List[Movement](),
+      if (value(1 , 6) == color)
+        findMovePath(1, 6)
+      else
+        List[Movement](),
+      if (value(2 , 1) == color)
+        findMovePath(2, 1)
+      else
+        List[Movement](),
+      if (value(2 , 3) == color)
+        findMovePath(2, 3)
+      else
+        List[Movement](),
+      if (value(2 , 5) == color)
+        findMovePath(2, 5)
+      else
+        List[Movement](),
+      if (value(2 , 7) == color)
+        findMovePath(2, 7)
+      else
+        List[Movement](),
+      if (value(3 , 0) == color)
+        findMovePath(3, 0)
+      else
+        List[Movement](),
+      if (value(3 , 2) == color)
+        findMovePath(3, 2)
+      else
+        List[Movement](),
+      if (value(3 , 4) == color)
+        findMovePath(3, 4)
+      else
+        List[Movement](),
+      if (value(3 , 6) == color)
+        findMovePath(3, 6)
+      else
+        List[Movement](),
+      if (value(4 , 1) == color)
+        findMovePath(4, 1)
+      else
+        List[Movement](),
+      if (value(4 , 3) == color)
+        findMovePath(4, 3)
+      else
+        List[Movement](),
+      if (value(4 , 5) == color)
+        findMovePath(4, 5)
+      else
+        List[Movement](),
+      if (value(4 , 7) == color)
+        findMovePath(4, 7)
+      else
+        List[Movement](),
+      if (value(5 , 0) == color)
+        findMovePath(5, 0)
+      else
+        List[Movement](),
+      if (value(5 , 2) == color)
+        findMovePath(5, 2)
+      else
+        List[Movement](),
+      if (value(5 , 4) == color)
+        findMovePath(5, 4)
+      else
+        List[Movement](),
+      if (value(5 , 6) == color)
+        findMovePath(5, 6)
+      else
+        List[Movement](),
+      if (value(6 , 1) == color)
+        findMovePath(6, 1)
+      else
+        List[Movement](),
+      if (value(6 , 3) == color)
+        findMovePath(6, 3)
+      else
+        List[Movement](),
+      if (value(6 , 5) == color)
+        findMovePath(6, 5)
+      else
+        List[Movement](),
+      if (value(6 , 7) == color)
+        findMovePath(6, 7)
+      else
+        List[Movement](),
+      if (value(7 , 0) == color)
+        findMovePath(7, 0)
+      else
+        List[Movement](),
+      if (value(7 , 2) == color)
+        findMovePath(7, 2)
+      else
+        List[Movement](),
+      if (value(7 , 4) == color)
+        findMovePath(7, 4)
+      else
+        List[Movement](),
+      if (value(7 , 6) == color)
+        findMovePath(7, 6)
+      else
+        List[Movement]()
+    )
+    movements.flatten.filter(_.move.nonEmpty)
   }
 
   def findStrikePath(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
@@ -563,7 +748,5 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
     }
   }
 
-  def objectiveFunction:Int = tab(0).sum + tab(1).sum + tab(2).sum + tab(3).sum + tab(4).sum + tab(5).sum + tab(6).sum+ tab(7).sum
-
-
+  def objectiveFunction():Int = tab(0).sum + tab(1).sum + tab(2).sum + tab(3).sum + tab(4).sum + tab(5).sum + tab(6).sum+ tab(7).sum
 }
