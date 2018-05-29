@@ -1,7 +1,5 @@
 import java.lang.Cloneable
 
-import scala.collection.mutable.ListBuffer
-
 class Board(t: Array[Array[Int]]) extends Cloneable{
   val white: Int = -1
   val empty: Int = 0
@@ -572,7 +570,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
         onTheWay(inc, x_s, y_s, x_s - i, y_s - i)
     }
     if (res.sum == 0) {
-      println("king can move")
+//      println("king can move")
       true
     }
     else
@@ -580,26 +578,26 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   }
 
   def onTheWay(inc: Int, x: Int, y: Int, cx: Int, cy: Int): Int = {
-    println(math.abs(cx - x))
+//    println(math.abs(cx - x))
     if (value(cx, cy) == empty) {
-      println("Adding 0")
+//      println("Adding 0")
       0
     }
     else if ((value(x,y) == blackKing && (value(cx,cy) == whiteKing || value(cx,cy) == white))||
       value(x,y) == whiteKing && (value(cx,cy) == blackKing || value(cx,cy) == black)) {
 
-      println("Adding 1")
+//      println("Adding 1")
       1
     }
     else {
-      println("Adding 2")
+//      println("Adding 2")
       2
     }
   }
 
   def canKingStrike(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
     if (!canMove(x_s, y_s, x_e, y_e)) {
-      println("Can't move")
+//      println("Can't move")
       return false
     }
     val inc = math.abs(y_e - y_s)
@@ -617,7 +615,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       else
         onTheWay(inc, x_s, y_s, x_s - i, y_s - i)
     }
-    println(res)
+//    println(res)
     res.sum == 1
   }
 
@@ -643,14 +641,14 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   def move(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
     if (isChecker(x_s, y_s))
       if (math.abs(x_s - x_e) == 2) {
-        println("striking" , x_s, y_s,x_e,y_e)
+//        println("striking" , x_s, y_s,x_e,y_e)
         strikeOnce(x_s, y_s, x_e, y_e)
 //        if (canStrike(x_e, y_e))
 //          println("You must strike again, do it!")
         true
       }
       else {
-        println("moving" , x_s, y_s,x_e,y_e)
+//        println("moving" , x_s, y_s,x_e,y_e)
         moveChecker(x_s, y_s, x_e, y_e)
         true
       }
@@ -669,8 +667,8 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       }
     }*/
     else{
-      println("can't move ")
-      println(x_s, y_s, x_e, y_e)
+//      println("can't move ")
+//      println(x_s, y_s, x_e, y_e)
       false
     }
   }
@@ -684,7 +682,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       val y1 = m.move(i)._2
       val x2 = m.move(i)._3
       val y2 = m.move(i)._4
-      println(x1, y1 , x2, y2)
+//      println(x1, y1 , x2, y2)
       move(x1,y1,x2,y2)
     }
   }
@@ -720,4 +718,10 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   }
 
   def objectiveFunction():Int = tab(0).sum + tab(1).sum + tab(2).sum + tab(3).sum + tab(4).sum + tab(5).sum + tab(6).sum+ tab(7).sum
+
+  def countCheckers: (Int,Int) = {
+    val countWhite = tab.toList.flatten.count(_ == white)
+    val countBlack = tab.toList.flatten.count(_ == black)
+    (countWhite, countBlack)
+  }
 }
