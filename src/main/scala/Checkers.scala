@@ -3,6 +3,8 @@ object Checkers extends App {
   val white: Int = -1
   val empty: Int = 0
   val black: Int = 1
+  val whiteKing: Int = -2
+  val blackKing: Int = 2
 
   object GameState{
     //val playerColor = 0
@@ -11,13 +13,13 @@ object Checkers extends App {
     val possibleMoves = 2
     val stats = Array(/*white,*/ white, 0, 7)
 
-    /*def nextTurn: Unit = {
+    def nextTurn: Unit = {
       if(stats(turnColor) == white)
         stats(turnColor) = black
       else
         stats(turnColor) = white
       stats(score) = board.objectiveFunction
-    }*/
+    }
   }
 
   //init
@@ -34,27 +36,27 @@ object Checkers extends App {
     Array(empty, empty, empty, empty, empty, empty, empty, empty),
     Array(empty, empty, white, empty, empty, empty, empty, empty),
     Array(empty, empty, empty, empty, empty, empty, empty, empty),
-    Array(empty, empty, empty, empty, empty, empty, white, empty),
     Array(empty, empty, empty, empty, empty, empty, empty, empty),
-    Array(empty, empty, white, empty, white, empty, empty, empty),
     Array(empty, empty, empty, empty, empty, empty, empty, empty),
-    Array(2, empty, empty, empty, empty, empty, empty, empty)
+    Array(empty, empty, empty, empty, empty, empty, empty, empty),
+    Array(empty, empty, empty, empty, empty, empty, empty, blackKing),
+    Array(empty, empty, empty, empty, empty, empty, empty, empty)
   )
   val board =  new Board(boardFields)
-  board.drawBoard()
-  val r = board.possibleKingStrikePaths(black)
+  //board.drawBoard()
+  /*val r = board.possibleKingStrikePaths(black)
   val len = r.length
   for {
     i <- 0 until len
   } yield {
     println(r(i).move)
-  }
+  }*/
 
-  /*try {
+  try {
     //input player color
     val playerColor = choosePlayerColor
     val player = new Player(board,playerColor)
-    val bot = new Bot(board,oppositeColour(playerColor))
+    val bot = new Bot(board,oppositeColor(playerColor))
     println(player.color)
     println(bot.color)
     //main loop
@@ -104,8 +106,8 @@ object Checkers extends App {
   }
 
   def chooseMove(player_ : Player,c: Int): Unit = {
-    val possibleStrike = board.possibleStrikePaths(c)
-    val possibleMove = board.findAllMovePaths(c)
+    val possibleStrike = board.possibleStrikePaths(c) ++ board.possibleKingStrikePaths(c)
+    val possibleMove = board.findAllMovePaths(c) ++ board.findAllKingMovePaths(c)
     if (possibleStrike.nonEmpty) {
       GameState.stats(GameState.possibleMoves) = possibleStrike.length
       println("Possible strikes:")
@@ -151,13 +153,13 @@ object Checkers extends App {
       throw new IllegalArgumentException("wrong input")
   }
 
-  def oppositeColour(color: Int): Int ={
+  def oppositeColor(color: Int): Int ={
     if(color == white)
       black
-    else if(color ==black)
+    else if(color == black)
       white
     else
       throw new NoSuchFieldException("Unknown color")
-  }*/
+  }
 
 }

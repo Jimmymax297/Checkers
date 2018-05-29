@@ -28,14 +28,12 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   }
 
   def color(x: Int, y: Int): Int = {
-    if (value(x, y) == empty)
-      empty
-    else {
       if (value(x, y) == white || value(x, y) == whiteKing)
         white
-      else
+      else if (value(x, y) == black || value(x, y) == blackKing)
         black
-    }
+      else
+        empty
   }
 
   def direction(x_s: Int, y_s: Int, x_e: Int, y_e: Int, v: Int): Int = {
@@ -111,26 +109,6 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       false
   }
 
-  def strikers(c: String): IndexedSeq[(Int, Int)] = {
-    val col = if (c == "white")
-      white
-    else
-      black
-    val t: IndexedSeq[IndexedSeq[(Int, Int)]] = for {
-      x <- 0 to 7
-    } yield {
-      for {
-       y <- 0 to 7
-      } yield {
-        if((isChecker(x, y) || isKing(x, y)) && canStrike(x, y) && col == color(x, y))
-          (x, y)
-        else
-          (-1, -1)
-      }
-    }
-    t.flatten.filter(_ != (-1, -1))
-  }
-
   def findAllStrikePaths(color_ : Int): List[Movement] = {
     val color = color_
     val movements = for {
@@ -157,8 +135,10 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       j <- 0 until 8
       if j != i
     } yield {
-     if (isKing(i, j) && color(i, j) == c)
+     if (isKing(i, j) && color(i, j) == c) {
+       println("findAllKingStrikePaths")
        findStrikePathKing(i, j, new Movement(List[(Int, Int, Int, Int)]()), this)
+     }
      else
        List[Movement]()
       }
@@ -172,12 +152,14 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       j <- 0 until 8
       if j != i
     } yield {
-        if (isKing(i, j) && color(i, j) == c)
-          findMovePathKing(i, j, new Movement(List[(Int, Int, Int, Int)]()), this)
+        if (isKing(i, j) && color(i, j) == c) {
+          println("findAllKingMovePaths")
+          findMovePathKing(i, j)
+        }
         else
           List[Movement]()
       }
-    movements.toList.flatten.flatten
+    movements.toList.flatten
   }
 
   def possibleKingMovePaths(c: Int): List[Movement] = {
@@ -224,14 +206,14 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
         else
           new Movement(List()),
       if (isChecker(x, y)
-        &&x + 1 <= 7 && y + 1 <= 7
+        && x + 1 <= 7 && y + 1 <= 7
         && canMoveForward(x, y, x + 1, y + 1)) {
           new Movement(List((x, y, x + 1, y + 1)))
         }
         else
           new Movement(List()),
       if (isChecker(x, y)
-        &&x + 1 <= 7 && y - 1 >= 0
+        && x + 1 <= 7 && y - 1 >= 0
         && canMoveForward(x, y, x + 1, y - 1)) {
           new Movement(List((x, y, x + 1, y - 1)))
         }
@@ -404,80 +386,64 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
     res.sum == 1
   }
 
-  def findMovePathKing(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
-    if (b.value(x, y) == 0)
-      return List[Movement](m)
-
-    val list = List[Movement](m) ++ findMoveKingRightUp(x, y, m, b) ++ findMoveKingRightDown(x, y, m, b) ++ findMoveKingLeftDown(x, y, m, b) ++ findMoveKingLeftUp(x, y, m, b)
-    list.filter(_.move.nonEmpty)
+  def findMovePathKing(x: Int, y: Int): List[Movement] = {
+    List[Movement]() ++ findMovePathKingUpRight(x, y) ++ findMovePathKingDownRight(x, y) ++ findMovePathKingDownLeft(x, y) ++ findMovePathKingUpLeft(x, y)
   }
 
-  def findMoveKingRightUp(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
-    val res = for {
+  def findMovePathKingUpRight(x: Int, y: Int): List[Movement] = {
+    val list = for {
       i <- 1 until 8 - math.min(x, y)
-      if x - i >= 0 && y + i <= 7
     } yield {
-      if (b.canKingMove(x, y, x - i, y + i)) {
-        val board = copyBoard(b)
-        board.move(x, y, x - i, y + i)
-        board.drawBoard()
-        findMovePathKing(x - i, y + i, new Movement(m.move :+ (x, y, x - i, y + i)), board)
+      if (x - i >= 0 && y + i <= 7 && canKingMove(x, y, x - i, y + i)) {
+        println("upright")
+        new Movement(List((x, y, x - i, y + i)))
       }
       else
-        List[Movement]()
+        new Movement(List())
     }
-    res.toList.flatten
+    list.toList.filter(_.move.nonEmpty)
   }
 
-  def findMoveKingRightDown(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
-    val res = for {
+  def findMovePathKingDownRight(x: Int, y: Int): List[Movement] = {
+    val list = for {
       i <- 1 until 8 - math.min(x, y)
-      if x + i <= 7 && y + i <= 7
     } yield {
-      if (b.canKingMove(x, y, x + i, y + i)) {
-        val board = copyBoard(b)
-        board.move(x, y, x + i, y + i)
-        board.drawBoard()
-        findMovePathKing(x + i, y + i, new Movement(m.move :+ (x, y, x + i, y + i)), board)
+      if (x + i <= 7 && y + i <= 7 && canKingMove(x, y, x + i, y + i)) {
+        println("downright")
+        new Movement(List((x, y, x + i, y + i)))
       }
       else
-        List[Movement]()
+        new Movement(List())
     }
-    res.toList.flatten
+    list.toList.filter(_.move.nonEmpty)
   }
 
-  def findMoveKingLeftDown(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
-    val res = for {
+  def findMovePathKingDownLeft(x: Int, y: Int): List[Movement] = {
+    val list = for {
       i <- 1 until 8 - math.min(x, y)
-      if x + i <= 7 && y - i >= 0
     } yield {
-      if (b.canKingMove(x, y, x + i, y - i)) {
-        val board = copyBoard(b)
-        board.move(x, y, x + i, y - i)
-        board.drawBoard()
-        findMovePathKing(x + i, y - i, new Movement(m.move :+ (x, y, x + i, y - i)), board)
+      if (x + i <= 7 && y - i >= 0 && canKingMove(x, y, x + i, y - i)) {
+        println("downleft")
+        new Movement(List((x, y, x + i, y - i)))
       }
       else
-        List[Movement]()
+        new Movement(List())
     }
-    res.toList.flatten
+    list.toList.filter(_.move.nonEmpty)
   }
 
-  def findMoveKingLeftUp(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
-    val res = for {
+  def findMovePathKingUpLeft(x: Int, y: Int): List[Movement] = {
+    val list = for {
       i <- 1 until 8 - math.min(x, y)
-      if x - i >= 0 && y - i >= 0
     } yield {
-      if (b.canKingMove(x, y, x - i, y - i)) {
-        val board = copyBoard(b)
-        board.move(x, y, x - i, y - i)
-        board.drawBoard()
-        findStrikePathKing(x - i, y - i, new Movement(m.move :+ (x, y, x - i, y - i)), board)
+      if (x - i >= 0 && y - i >= 0 && canKingMove(x, y, x - i, y - i)) {
+        println("upleft")
+        new Movement(List((x, y, x - i, y - i)))
       }
       else
-        List[Movement]()
+        new Movement(List())
     }
-    res.toList.flatten
+    list.toList.filter(_.move.nonEmpty)
   }
 
   def findStrikePathKing(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
@@ -496,7 +462,6 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       if (b.canKingStrike(x, y, x - i, y + i)) {
         val board = copyBoard(b)
         board.move(x, y, x - i, y + i)
-        board.drawBoard()
         findStrikePathKing(x - i, y + i, new Movement(m.move :+ (x, y, x - i, y + i)), board)
       }
       else
@@ -513,7 +478,6 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       if (b.canKingStrike(x, y, x + i, y + i)) {
         val board = copyBoard(b)
         board.move(x, y, x + i, y + i)
-        board.drawBoard()
         findStrikePathKing(x + i, y + i, new Movement(m.move :+ (x, y, x + i, y + i)), board)
       }
       else {
@@ -532,7 +496,6 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       if (b.canKingStrike(x, y, x + i, y - i)) {
         val board = copyBoard(b)
         board.move(x, y, x + i, y - i)
-        board.drawBoard()
         findStrikePathKing(x + i, y - i, new Movement(m.move :+ (x, y, x + i, y - i)), board)
       }
       else
@@ -549,7 +512,6 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       if (b.canKingStrike(x, y, x - i, y - i)) {
         val board = copyBoard(b)
         board.move(x, y, x - i, y - i)
-        board.drawBoard()
         findStrikePathKing(x - i, y - i, new Movement(m.move :+ (x, y, x - i, y - i)), board)
       }
       else
@@ -622,6 +584,15 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       val y2 = m.move(i)._4
       move(x1,y1,x2,y2)
     }
+    if(becomeKing(m.move(len - 1)._3, m.move(len - 1)._4))
+      king(m.move(len - 1)._3, m.move(len - 1)._4)
+  }
+
+  def becomeKing(x: Int, y: Int): Boolean = {
+    if (isChecker(x, y) && (color(x, y) == white && x == 0) || (color(x, y) == black && x == 7))
+      true
+    else
+      false
   }
 
   def printing(x: Int, y: Int): Any = {
