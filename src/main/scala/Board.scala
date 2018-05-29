@@ -1,7 +1,5 @@
 import java.lang.Cloneable
 
-import scala.collection.mutable.ListBuffer
-
 class Board(t: Array[Array[Int]]) extends Cloneable{
   val white: Int = -1
   val empty: Int = 0
@@ -135,137 +133,73 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
 
   def findAllStrikePaths(color_ : Int): List[Movement] = {
     val color = color_
-    val movements = List(
-      if (value(0 , 1) == color)
-        findStrikePath(0, 1, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(0 , 3) == color)
-        findStrikePath(0, 3, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(0 , 5) == color)
-        findStrikePath(0, 5, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(0 , 7) == color)
-        findStrikePath(0, 7, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(1 , 0) == color)
-        findStrikePath(1, 0, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(1 , 2) == color)
-        findStrikePath(1, 2, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(1 , 4) == color)
-        findStrikePath(1, 4, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(1 , 6) == color)
-        findStrikePath(1, 6, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(2 , 1) == color)
-        findStrikePath(2, 1, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(2 , 3) == color)
-        findStrikePath(2, 3, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(2 , 5) == color)
-        findStrikePath(2, 5, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(2 , 7) == color)
-        findStrikePath(2, 7, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(3 , 0) == color)
-        findStrikePath(3, 0, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(3 , 2) == color)
-        findStrikePath(3, 2, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(3 , 4) == color)
-        findStrikePath(3, 4, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(3 , 6) == color)
-        findStrikePath(3, 6, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(4 , 1) == color)
-        findStrikePath(4, 1, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(4 , 3) == color)
-        findStrikePath(4, 3, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(4 , 5) == color)
-        findStrikePath(4, 5, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(4 , 7) == color)
-        findStrikePath(4, 7, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(5 , 0) == color)
-        findStrikePath(5, 0, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(5 , 2) == color)
-        findStrikePath(5, 2, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(5 , 4) == color)
-        findStrikePath(5, 4, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(5 , 6) == color)
-        findStrikePath(5, 6, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(6 , 1) == color)
-        findStrikePath(6, 1, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(6 , 3) == color)
-        findStrikePath(6, 3, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(6 , 5) == color)
-        findStrikePath(6, 5, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(6 , 7) == color)
-        findStrikePath(6, 7, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(7 , 0) == color)
-        findStrikePath(7, 0, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(7 , 2) == color)
-        findStrikePath(7, 2, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(7 , 4) == color)
-        findStrikePath(7, 4, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement](),
-      if (value(7 , 6) == color)
-        findStrikePath(7, 6, new Movement(List[(Int, Int, Int, Int)]()), this)
-      else
-        List[Movement]()
-    )
-    movements.flatten
+    val movements = for {
+      i <- 0 until 8
+    } yield {
+      for {
+        j <- 0 until 8
+        if j != i
+      } yield {
+        if (value(i , j) == color)
+          findStrikePath(i, j, new Movement(List[(Int, Int, Int, Int)]()), this)
+        else
+          List[Movement]()
+      }
+    }
+    movements.toList.flatten.flatten
+  }
+
+  def findAllKingStrikePaths(c: Int): List[Movement] = {
+    val movements = for {
+      i <- 0 until 8
+    } yield {
+      for {
+      j <- 0 until 8
+      if j != i
+    } yield {
+     if (isKing(i, j) && color(i, j) == c)
+       findStrikePathKing(i, j, new Movement(List[(Int, Int, Int, Int)]()), this)
+     else
+       List[Movement]()
+      }
+    }
+    movements.toList.flatten.flatten
+  }
+
+  def findAllKingMovePaths(c : Int): List[Movement] = {
+    val movements = for {
+      i <- 0 until 8
+      j <- 0 until 8
+      if j != i
+    } yield {
+        if (isKing(i, j) && color(i, j) == c)
+          findMovePathKing(i, j, new Movement(List[(Int, Int, Int, Int)]()), this)
+        else
+          List[Movement]()
+      }
+    movements.toList.flatten.flatten
+  }
+
+  def possibleKingMovePaths(c: Int): List[Movement] = {
+    val l = findAllKingMovePaths(c)
+    val lengthList = l.map(_.move.length)
+    if (lengthList.nonEmpty) {
+      val maxLength = lengthList.max
+      l.filter(_.move.length == maxLength)
+    }
+    else
+      List[Movement]()
+  }
+
+  def possibleKingStrikePaths(c: Int): List[Movement] = {
+    val l = findAllKingStrikePaths(c)
+    val lengthList = l.map(_.move.length)
+    if (lengthList.nonEmpty) {
+      val maxLength = lengthList.max
+      l.filter(_.move.length == maxLength)
+    }
+    else
+      List[Movement]()
   }
 
   def possibleStrikePaths(s: Int): List[Movement] = {
@@ -316,137 +250,33 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
 
   def findAllMovePaths(color_ : Int): List[Movement] = {
     val color = color_
-    val movements = List(
-      if (value(0 , 1) == color)
-        findMovePath(0, 1)
-      else
-        List[Movement](),
-      if (value(0 , 3) == color)
-        findMovePath(0, 3)
-      else
-        List[Movement](),
-      if (value(0 , 5) == color)
-        findMovePath(0, 5)
-      else
-        List[Movement](),
-      if (value(0 , 7) == color)
-        findMovePath(0, 7)
-      else
-        List[Movement](),
-      if (value(1 , 0) == color)
-        findMovePath(1, 0)
-      else
-        List[Movement](),
-      if (value(1 , 2) == color)
-        findMovePath(1, 2)
-      else
-        List[Movement](),
-      if (value(1 , 4) == color)
-        findMovePath(1, 4)
-      else
-        List[Movement](),
-      if (value(1 , 6) == color)
-        findMovePath(1, 6)
-      else
-        List[Movement](),
-      if (value(2 , 1) == color)
-        findMovePath(2, 1)
-      else
-        List[Movement](),
-      if (value(2 , 3) == color)
-        findMovePath(2, 3)
-      else
-        List[Movement](),
-      if (value(2 , 5) == color)
-        findMovePath(2, 5)
-      else
-        List[Movement](),
-      if (value(2 , 7) == color)
-        findMovePath(2, 7)
-      else
-        List[Movement](),
-      if (value(3 , 0) == color)
-        findMovePath(3, 0)
-      else
-        List[Movement](),
-      if (value(3 , 2) == color)
-        findMovePath(3, 2)
-      else
-        List[Movement](),
-      if (value(3 , 4) == color)
-        findMovePath(3, 4)
-      else
-        List[Movement](),
-      if (value(3 , 6) == color)
-        findMovePath(3, 6)
-      else
-        List[Movement](),
-      if (value(4 , 1) == color)
-        findMovePath(4, 1)
-      else
-        List[Movement](),
-      if (value(4 , 3) == color)
-        findMovePath(4, 3)
-      else
-        List[Movement](),
-      if (value(4 , 5) == color)
-        findMovePath(4, 5)
-      else
-        List[Movement](),
-      if (value(4 , 7) == color)
-        findMovePath(4, 7)
-      else
-        List[Movement](),
-      if (value(5 , 0) == color)
-        findMovePath(5, 0)
-      else
-        List[Movement](),
-      if (value(5 , 2) == color)
-        findMovePath(5, 2)
-      else
-        List[Movement](),
-      if (value(5 , 4) == color)
-        findMovePath(5, 4)
-      else
-        List[Movement](),
-      if (value(5 , 6) == color)
-        findMovePath(5, 6)
-      else
-        List[Movement](),
-      if (value(6 , 1) == color)
-        findMovePath(6, 1)
-      else
-        List[Movement](),
-      if (value(6 , 3) == color)
-        findMovePath(6, 3)
-      else
-        List[Movement](),
-      if (value(6 , 5) == color)
-        findMovePath(6, 5)
-      else
-        List[Movement](),
-      if (value(6 , 7) == color)
-        findMovePath(6, 7)
-      else
-        List[Movement](),
-      if (value(7 , 0) == color)
-        findMovePath(7, 0)
-      else
-        List[Movement](),
-      if (value(7 , 2) == color)
-        findMovePath(7, 2)
-      else
-        List[Movement](),
-      if (value(7 , 4) == color)
-        findMovePath(7, 4)
-      else
-        List[Movement](),
-      if (value(7 , 6) == color)
-        findMovePath(7, 6)
-      else
-        List[Movement]()
-    )
-    movements.flatten.filter(_.move.nonEmpty)
+    val movements = for {
+      i <- 0 until 8
+    } yield {
+      for {
+        j <- 0 until 8
+        if j != i
+      } yield {
+        if (value(i , j) == color)
+          findMovePath(i, j)
+        else
+          List[Movement]()
+      }
+    }
+    movements.toList.flatten.flatten.filter(_.move.nonEmpty)
+  }
+
+  def copyBoard(b: Board): Board = {
+    val newTab = Array(
+      Array(empty, b.tab(0)(1), empty, b.tab(0)(3), empty, b.tab(0)(5), empty, b.tab(0)(7)),
+      Array(b.tab(1)(0), empty, b.tab(1)(2), empty, b.tab(1)(4), empty, b.tab(1)(6), empty),
+      Array(empty, b.tab(2)(1), empty, b.tab(2)(3), empty, b.tab(2)(5), empty, b.tab(2)(7)),
+      Array(b.tab(3)(0), empty, b.tab(3)(2), empty, b.tab(3)(4), empty, b.tab(3)(6), empty),
+      Array(empty, b.tab(4)(1), empty, b.tab(4)(3), empty, b.tab(4)(5), empty, b.tab(4)(7)),
+      Array(b.tab(5)(0), empty, b.tab(5)(2), empty, b.tab(5)(4), empty, b.tab(5)(6), empty),
+      Array(empty, b.tab(6)(1), empty, b.tab(6)(3), empty, b.tab(6)(5), empty, b.tab(6)(7)),
+      Array(b.tab(7)(0), empty, b.tab(7)(2), empty, b.tab(7)(4), empty, b.tab(7)(6), empty))
+    new Board(newTab)
   }
 
   def findStrikePath(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
@@ -461,21 +291,11 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
     val v = b.value(x, y)
     if ((x - 1 >=0 && y + 1 <= 7 && x - 2 >= 0 && y + 2 <= 7)&&
       (b.value(x - 1, y + 1) == -v && b.value(x - 2, y + 2) == empty)) {
-      val newTab = Array(
-        Array(empty, b.tab(0)(1), empty, b.tab(0)(3), empty, b.tab(0)(5), empty, b.tab(0)(7)),
-        Array(b.tab(1)(0), empty, b.tab(1)(2), empty, b.tab(1)(4), empty, b.tab(1)(6), empty),
-        Array(empty, b.tab(2)(1), empty, b.tab(2)(3), empty, b.tab(2)(5), empty, b.tab(2)(7)),
-        Array(b.tab(3)(0), empty, b.tab(3)(2), empty, b.tab(3)(4), empty, b.tab(3)(6), empty),
-        Array(empty, b.tab(4)(1), empty, b.tab(4)(3), empty, b.tab(4)(5), empty, b.tab(4)(7)),
-        Array(b.tab(5)(0), empty, b.tab(5)(2), empty, b.tab(5)(4), empty, b.tab(5)(6), empty),
-        Array(empty, b.tab(6)(1), empty, b.tab(6)(3), empty, b.tab(6)(5), empty, b.tab(6)(7)),
-        Array(b.tab(7)(0), empty, b.tab(7)(2), empty, b.tab(7)(4), empty, b.tab(7)(6), empty))
-      val board = new Board(newTab)
+      val board = copyBoard(b)
       board.move(x, y, x - 2, y + 2)
       findStrikePath(x - 2, y + 2, new Movement(m.move :+ (x, y, x - 2, y + 2)), board)
     }
     else {
-      //println("OUT")
       List[Movement]()
     }
   }
@@ -484,21 +304,11 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
     val v = b.value(x, y)
     if ((x + 1 <= 7 && y + 1 <= 7 && x + 2 <= 7 && y + 2 <= 7)&&
       (b.value(x + 1, y + 1) == -v && b.value(x + 2, y + 2) == empty)) {
-      val newTab = Array(
-        Array(empty, b.tab(0)(1), empty, b.tab(0)(3), empty, b.tab(0)(5), empty, b.tab(0)(7)),
-        Array(b.tab(1)(0), empty, b.tab(1)(2), empty, b.tab(1)(4), empty, b.tab(1)(6), empty),
-        Array(empty, b.tab(2)(1), empty, b.tab(2)(3), empty, b.tab(2)(5), empty, b.tab(2)(7)),
-        Array(b.tab(3)(0), empty, b.tab(3)(2), empty, b.tab(3)(4), empty, b.tab(3)(6), empty),
-        Array(empty, b.tab(4)(1), empty, b.tab(4)(3), empty, b.tab(4)(5), empty, b.tab(4)(7)),
-        Array(b.tab(5)(0), empty, b.tab(5)(2), empty, b.tab(5)(4), empty, b.tab(5)(6), empty),
-        Array(empty, b.tab(6)(1), empty, b.tab(6)(3), empty, b.tab(6)(5), empty, b.tab(6)(7)),
-        Array(b.tab(7)(0), empty, b.tab(7)(2), empty, b.tab(7)(4), empty, b.tab(7)(6), empty))
-      val board = new Board(newTab)
+      val board = copyBoard(b)
       board.move(x, y, x + 2, y + 2)
       findStrikePath(x + 2, y + 2, new Movement(m.move :+ (x, y, x + 2, y + 2)), board)
     }
     else{
-//      println("OUT")
       List[Movement]()
     }
   }
@@ -507,21 +317,11 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
     val v = b.value(x, y)
     if ((x + 1 <= 7 && y - 1 >= 0 && x + 2 <= 7 && y - 2 >= 0)&&
       (b.value(x + 1, y - 1) == -v && b.value(x + 2, y - 2) == empty)) {
-      val newTab = Array(
-        Array(empty, b.tab(0)(1), empty, b.tab(0)(3), empty, b.tab(0)(5), empty, b.tab(0)(7)),
-        Array(b.tab(1)(0), empty, b.tab(1)(2), empty, b.tab(1)(4), empty, b.tab(1)(6), empty),
-        Array(empty, b.tab(2)(1), empty, b.tab(2)(3), empty, b.tab(2)(5), empty, b.tab(2)(7)),
-        Array(b.tab(3)(0), empty, b.tab(3)(2), empty, b.tab(3)(4), empty, b.tab(3)(6), empty),
-        Array(empty, b.tab(4)(1), empty, b.tab(4)(3), empty, b.tab(4)(5), empty, b.tab(4)(7)),
-        Array(b.tab(5)(0), empty, b.tab(5)(2), empty, b.tab(5)(4), empty, b.tab(5)(6), empty),
-        Array(empty, b.tab(6)(1), empty, b.tab(6)(3), empty, b.tab(6)(5), empty, b.tab(6)(7)),
-        Array(b.tab(7)(0), empty, b.tab(7)(2), empty, b.tab(7)(4), empty, b.tab(7)(6), empty))
-      val board = new Board(newTab)
+      val board = copyBoard(b)
       board.move(x, y, x + 2, y - 2)
       findStrikePath(x + 2, y - 2, new Movement(m.move :+ (x, y, x + 2, y - 2)), board)
     }
     else{
-//      println("OUT")
       List[Movement]()
     }
   }
@@ -530,16 +330,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
     val v = b.value(x, y)
     if ((x - 1 >= 0 && y - 1 >= 0 && x - 2 >= 0 && y - 2 >= 0)&&
       (b.value(x - 1, y - 1) == -v && b.value(x - 2, y - 2) == empty)) {
-      val newTab = Array(
-        Array(empty, b.tab(0)(1), empty, b.tab(0)(3), empty, b.tab(0)(5), empty, b.tab(0)(7)),
-        Array(b.tab(1)(0), empty, b.tab(1)(2), empty, b.tab(1)(4), empty, b.tab(1)(6), empty),
-        Array(empty, b.tab(2)(1), empty, b.tab(2)(3), empty, b.tab(2)(5), empty, b.tab(2)(7)),
-        Array(b.tab(3)(0), empty, b.tab(3)(2), empty, b.tab(3)(4), empty, b.tab(3)(6), empty),
-        Array(empty, b.tab(4)(1), empty, b.tab(4)(3), empty, b.tab(4)(5), empty, b.tab(4)(7)),
-        Array(b.tab(5)(0), empty, b.tab(5)(2), empty, b.tab(5)(4), empty, b.tab(5)(6), empty),
-        Array(empty, b.tab(6)(1), empty, b.tab(6)(3), empty, b.tab(6)(5), empty, b.tab(6)(7)),
-        Array(b.tab(7)(0), empty, b.tab(7)(2), empty, b.tab(7)(4), empty, b.tab(7)(6), empty))
-      val board = new Board(newTab)
+      val board = copyBoard(b)
       board.move(x, y, x - 2, y - 2)
       findStrikePath(x - 2, y - 2, new Movement(m.move :+ (x, y, x - 2, y - 2)), board)
     }
@@ -563,43 +354,36 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       if inc == inc2
     } yield {
       if (dir == 0)
-        onTheWay(inc, x_s, y_s, x_s - i, y_s + i)
+        onTheWay(x_s, y_s, x_s - i, y_s + i) //prawo gora
       else if (dir == 1)
-        onTheWay(inc, x_s, y_s, x_s + i, y_s + i)
+        onTheWay(x_s, y_s, x_s + i, y_s + i) //prawo dol
       else if (dir == 2)
-        onTheWay(inc, x_s, y_s, x_s + i, y_s - i)
+        onTheWay(x_s, y_s, x_s + i, y_s - i) //lewo dol
       else
-        onTheWay(inc, x_s, y_s, x_s - i, y_s - i)
+        onTheWay(x_s, y_s, x_s - i, y_s - i) //lewo gora
     }
     if (res.sum == 0) {
-      println("king can move")
       true
     }
     else
       false
   }
 
-  def onTheWay(inc: Int, x: Int, y: Int, cx: Int, cy: Int): Int = {
-    println(math.abs(cx - x))
+  def onTheWay(x: Int, y: Int, cx: Int, cy: Int): Int = {
     if (value(cx, cy) == empty) {
-      println("Adding 0")
       0
     }
     else if ((value(x,y) == blackKing && (value(cx,cy) == whiteKing || value(cx,cy) == white))||
       value(x,y) == whiteKing && (value(cx,cy) == blackKing || value(cx,cy) == black)) {
-
-      println("Adding 1")
       1
     }
     else {
-      println("Adding 2")
       2
     }
   }
 
   def canKingStrike(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
     if (!canMove(x_s, y_s, x_e, y_e)) {
-      println("Can't move")
       return false
     }
     val inc = math.abs(y_e - y_s)
@@ -609,16 +393,169 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       if math.abs(y_e - y_s) == math.abs(x_e - x_s)
     } yield {
       if (dir == 0)
-      onTheWay(inc, x_s, y_s, x_s - i, y_s + i)
+        onTheWay(x_s, y_s, x_s - i, y_s + i)
       else if (dir == 1)
-        onTheWay(inc, x_s, y_s, x_s + i, y_s + i)
+        onTheWay(x_s, y_s, x_s + i, y_s + i)
       else if (dir == 2)
-        onTheWay(inc, x_s, y_s, x_s + i, y_s - i)
+        onTheWay(x_s, y_s, x_s + i, y_s - i)
       else
-        onTheWay(inc, x_s, y_s, x_s - i, y_s - i)
+        onTheWay(x_s, y_s, x_s - i, y_s - i)
     }
-    println(res)
     res.sum == 1
+  }
+
+  def findMovePathKing(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
+    if (b.value(x, y) == 0)
+      return List[Movement](m)
+
+    val list = List[Movement](m) ++ findMoveKingRightUp(x, y, m, b) ++ findMoveKingRightDown(x, y, m, b) ++ findMoveKingLeftDown(x, y, m, b) ++ findMoveKingLeftUp(x, y, m, b)
+    list.filter(_.move.nonEmpty)
+  }
+
+  def findMoveKingRightUp(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
+    val res = for {
+      i <- 1 until 8 - math.min(x, y)
+      if x - i >= 0 && y + i <= 7
+    } yield {
+      if (b.canKingMove(x, y, x - i, y + i)) {
+        val board = copyBoard(b)
+        board.move(x, y, x - i, y + i)
+        board.drawBoard()
+        findMovePathKing(x - i, y + i, new Movement(m.move :+ (x, y, x - i, y + i)), board)
+      }
+      else
+        List[Movement]()
+    }
+    res.toList.flatten
+  }
+
+  def findMoveKingRightDown(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
+    val res = for {
+      i <- 1 until 8 - math.min(x, y)
+      if x + i <= 7 && y + i <= 7
+    } yield {
+      if (b.canKingMove(x, y, x + i, y + i)) {
+        val board = copyBoard(b)
+        board.move(x, y, x + i, y + i)
+        board.drawBoard()
+        findMovePathKing(x + i, y + i, new Movement(m.move :+ (x, y, x + i, y + i)), board)
+      }
+      else
+        List[Movement]()
+    }
+    res.toList.flatten
+  }
+
+  def findMoveKingLeftDown(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
+    val res = for {
+      i <- 1 until 8 - math.min(x, y)
+      if x + i <= 7 && y - i >= 0
+    } yield {
+      if (b.canKingMove(x, y, x + i, y - i)) {
+        val board = copyBoard(b)
+        board.move(x, y, x + i, y - i)
+        board.drawBoard()
+        findMovePathKing(x + i, y - i, new Movement(m.move :+ (x, y, x + i, y - i)), board)
+      }
+      else
+        List[Movement]()
+    }
+    res.toList.flatten
+  }
+
+  def findMoveKingLeftUp(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
+    val res = for {
+      i <- 1 until 8 - math.min(x, y)
+      if x - i >= 0 && y - i >= 0
+    } yield {
+      if (b.canKingMove(x, y, x - i, y - i)) {
+        val board = copyBoard(b)
+        board.move(x, y, x - i, y - i)
+        board.drawBoard()
+        findStrikePathKing(x - i, y - i, new Movement(m.move :+ (x, y, x - i, y - i)), board)
+      }
+      else
+        List[Movement]()
+    }
+    res.toList.flatten
+  }
+
+  def findStrikePathKing(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
+    if (b.value(x,y)==0)
+      return List[Movement](m)
+
+    val list = List[Movement](m) ++ findStrikeKingLeftDown(x,y,m,b) ++ findStrikeKingRightDown(x,y,m,b) ++ findStrikeKingRightUp(x,y,m,b) ++ findStrikeKingLeftUp(x,y,m,b)
+    list.filter(_.move.nonEmpty)
+  }
+
+  def findStrikeKingRightUp(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
+    val res = for {
+      i <- 1 until 8 - math.min(x, y)
+      if x - i >= 0 && y + i <= 7
+    } yield {
+      if (b.canKingStrike(x, y, x - i, y + i)) {
+        val board = copyBoard(b)
+        board.move(x, y, x - i, y + i)
+        board.drawBoard()
+        findStrikePathKing(x - i, y + i, new Movement(m.move :+ (x, y, x - i, y + i)), board)
+      }
+      else
+        List[Movement]()
+    }
+    res.toList.flatten
+  }
+
+  def findStrikeKingRightDown(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
+    val res = for {
+      i <- 1 until (8 - math.min(x, y))
+      if x + i <= 7 && y + i <= 7
+    } yield {
+      if (b.canKingStrike(x, y, x + i, y + i)) {
+        val board = copyBoard(b)
+        board.move(x, y, x + i, y + i)
+        board.drawBoard()
+        findStrikePathKing(x + i, y + i, new Movement(m.move :+ (x, y, x + i, y + i)), board)
+      }
+      else {
+        List[Movement]()
+      }
+    }
+    res.toList.flatten
+  }
+
+  def findStrikeKingLeftDown(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
+    val res = for {
+      i <- 1 until (8 - math.min(x, y))
+      if x + i <= 7 && y - i >= 0
+        if b.canKingStrike(x, y, x + i, y - i)
+    } yield {
+      if (b.canKingStrike(x, y, x + i, y - i)) {
+        val board = copyBoard(b)
+        board.move(x, y, x + i, y - i)
+        board.drawBoard()
+        findStrikePathKing(x + i, y - i, new Movement(m.move :+ (x, y, x + i, y - i)), board)
+      }
+      else
+        List[Movement]()
+    }
+    res.toList.flatten
+  }
+
+  def findStrikeKingLeftUp(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
+    val res = for {
+      i <- 1 until (8 - math.min(x, y))
+      if x - i >= 0 && y - i >= 0
+    } yield {
+      if (b.canKingStrike(x, y, x - i, y - i)) {
+        val board = copyBoard(b)
+        board.move(x, y, x - i, y - i)
+        board.drawBoard()
+        findStrikePathKing(x - i, y - i, new Movement(m.move :+ (x, y, x - i, y - i)), board)
+      }
+      else
+        List[Movement]()
+    }
+    res.toList.flatten
   }
 
   def moveKing(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Unit = {
@@ -629,11 +566,20 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   }
 
   def kingStrike(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Unit = {
+    val inc = math.abs(y_e - y_s)
+    val dir = direction(x_s, y_s, x_e, y_e, inc)
     if (isKing(x_s, y_s) && canKingStrike(x_s, y_s, x_e, y_e)) {
       for {
-        i <- 1 until math.abs(y_e - y_s)
+        i <- 1 until inc
       } yield {
-        tab(x_e + i)(y_e + i) = empty
+        if (dir == 0)
+          tab(x_s - i)(y_s + i) = 0 //prawo gora
+        else if (dir == 1)
+          tab(x_s + i)(y_s + i) = 0 //prawo dol
+        else if (dir == 2)
+          tab(x_s + i)(y_s - i) = 0 //lewo dol
+        else
+          tab(x_s - i)(y_s - i) = 0//lewo gora
       }
       tab(x_e)(y_e) = value(x_s, y_s)
       tab(x_s)(y_s) = empty
@@ -643,34 +589,24 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   def move(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
     if (isChecker(x_s, y_s))
       if (math.abs(x_s - x_e) == 2) {
-        println("striking" , x_s, y_s,x_e,y_e)
         strikeOnce(x_s, y_s, x_e, y_e)
-//        if (canStrike(x_e, y_e))
-//          println("You must strike again, do it!")
         true
       }
       else {
-        println("moving" , x_s, y_s,x_e,y_e)
         moveChecker(x_s, y_s, x_e, y_e)
         true
       }
-    /*else if (isKing(x_s, y_s)) {
-      val strike = canKingStrike(x_s, y_s, x_e, y_e)
-      println(strike)
-      if (strike) {
-        println("King strike!")
+    else if (isKing(x_s, y_s)) {
+      if (canKingStrike(x_s, y_s, x_e, y_e)) {
         kingStrike(x_s, y_s, x_e, y_e)
         true
       }
       else {
-        println("King move!")
         moveKing(x_s, y_s, x_e, y_e)
         true
       }
-    }*/
+    }
     else{
-      println("can't move ")
-      println(x_s, y_s, x_e, y_e)
       false
     }
   }
@@ -684,7 +620,6 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       val y1 = m.move(i)._2
       val x2 = m.move(i)._3
       val y2 = m.move(i)._4
-      println(x1, y1 , x2, y2)
       move(x1,y1,x2,y2)
     }
   }
@@ -703,7 +638,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   }
 
   def drawBoard(): Unit = {
-    println("     0    1    2    3    4    5    6    7\n")
+    println("x/y  0    1    2    3    4    5    6    7\n")
     for {
       i <- 0 until 8
     } yield {

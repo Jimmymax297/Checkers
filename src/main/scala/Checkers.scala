@@ -11,17 +11,17 @@ object Checkers extends App {
     val possibleMoves = 2
     val stats = Array(/*white,*/ white, 0, 7)
 
-    def nextTurn: Unit = {
+    /*def nextTurn: Unit = {
       if(stats(turnColor) == white)
         stats(turnColor) = black
       else
         stats(turnColor) = white
       stats(score) = board.objectiveFunction
-    }
+    }*/
   }
 
   //init
-  val boardFields = Array(
+  /*val boardFields = Array(
     Array(empty, black, empty, black, empty, black, empty, black),
     Array(black, empty, black, empty, black, empty, black, empty),
     Array(empty, black, empty, black, empty, black, empty, black),
@@ -29,21 +29,28 @@ object Checkers extends App {
     Array(empty, empty, empty, empty, empty, empty, empty, empty),
     Array(white, empty, white, empty, white, empty, white, empty),
     Array(empty, white, empty, white, empty, white, empty, white),
-    Array(white, empty, white, empty, white, empty, white, empty))
-  /*val boardFields = Array(
-    Array(empty, black, empty, empty, empty, empty, empty, empty),
+    Array(white, empty, white, empty, white, empty, white, empty))*/
+  val boardFields = Array(
+    Array(empty, empty, empty, empty, empty, empty, empty, empty),
     Array(empty, empty, white, empty, empty, empty, empty, empty),
     Array(empty, empty, empty, empty, empty, empty, empty, empty),
-    Array(empty, empty, empty, empty, white, empty, white, empty),
+    Array(empty, empty, empty, empty, empty, empty, white, empty),
     Array(empty, empty, empty, empty, empty, empty, empty, empty),
     Array(empty, empty, white, empty, white, empty, empty, empty),
     Array(empty, empty, empty, empty, empty, empty, empty, empty),
-    Array(empty, empty, empty, empty, empty, empty, empty, empty)
-  )*/
+    Array(2, empty, empty, empty, empty, empty, empty, empty)
+  )
   val board =  new Board(boardFields)
+  board.drawBoard()
+  val r = board.possibleKingStrikePaths(black)
+  val len = r.length
+  for {
+    i <- 0 until len
+  } yield {
+    println(r(i).move)
+  }
 
-
-  try {
+  /*try {
     //input player color
     val playerColor = choosePlayerColor
     val player = new Player(board,playerColor)
@@ -151,6 +158,6 @@ object Checkers extends App {
       white
     else
       throw new NoSuchFieldException("Unknown color")
-  }
+  }*/
 
 }
