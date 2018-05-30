@@ -392,7 +392,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
 
   def findMovePathKingUpRight(x: Int, y: Int): List[Movement] = {
     val list = for {
-      i <- 1 until 8 - math.min(x, y)
+      i <- 1 until 8
     } yield {
       if (x - i >= 0 && y + i <= 7 && canKingMove(x, y, x - i, y + i)) {
         println("upright")
@@ -406,7 +406,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
 
   def findMovePathKingDownRight(x: Int, y: Int): List[Movement] = {
     val list = for {
-      i <- 1 until 8 - math.min(x, y)
+      i <- 1 until 8
     } yield {
       if (x + i <= 7 && y + i <= 7 && canKingMove(x, y, x + i, y + i)) {
         println("downright")
@@ -420,7 +420,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
 
   def findMovePathKingDownLeft(x: Int, y: Int): List[Movement] = {
     val list = for {
-      i <- 1 until 8 - math.min(x, y)
+      i <- 1 until 8
     } yield {
       if (x + i <= 7 && y - i >= 0 && canKingMove(x, y, x + i, y - i)) {
         println("downleft")
@@ -434,7 +434,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
 
   def findMovePathKingUpLeft(x: Int, y: Int): List[Movement] = {
     val list = for {
-      i <- 1 until 8 - math.min(x, y)
+      i <- 1 until 8
     } yield {
       if (x - i >= 0 && y - i >= 0 && canKingMove(x, y, x - i, y - i)) {
         println("upleft")
@@ -456,7 +456,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
 
   def findStrikeKingRightUp(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
     val res = for {
-      i <- 1 until 8 - math.min(x, y)
+      i <- 1 until 8
       if x - i >= 0 && y + i <= 7
     } yield {
       if (b.canKingStrike(x, y, x - i, y + i)) {
@@ -472,7 +472,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
 
   def findStrikeKingRightDown(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
     val res = for {
-      i <- 1 until (8 - math.min(x, y))
+      i <- 1 until 8
       if x + i <= 7 && y + i <= 7
     } yield {
       if (b.canKingStrike(x, y, x + i, y + i)) {
@@ -489,7 +489,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
 
   def findStrikeKingLeftDown(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
     val res = for {
-      i <- 1 until (8 - math.min(x, y))
+      i <- 1 until 8
       if x + i <= 7 && y - i >= 0
         if b.canKingStrike(x, y, x + i, y - i)
     } yield {
@@ -506,7 +506,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
 
   def findStrikeKingLeftUp(x: Int, y: Int, m: Movement, b: Board): List[Movement] = {
     val res = for {
-      i <- 1 until (8 - math.min(x, y))
+      i <- 1 until 8
       if x - i >= 0 && y - i >= 0
     } yield {
       if (b.canKingStrike(x, y, x - i, y - i)) {
