@@ -8,6 +8,19 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   val blackKing: Int = 2
   val tab:Array[Array[Int]] = t
 
+  def copyBoard(b: Board = this): Board = {
+    val newTab = Array(
+      Array(empty, b.tab(0)(1), empty, b.tab(0)(3), empty, b.tab(0)(5), empty, b.tab(0)(7)),
+      Array(b.tab(1)(0), empty, b.tab(1)(2), empty, b.tab(1)(4), empty, b.tab(1)(6), empty),
+      Array(empty, b.tab(2)(1), empty, b.tab(2)(3), empty, b.tab(2)(5), empty, b.tab(2)(7)),
+      Array(b.tab(3)(0), empty, b.tab(3)(2), empty, b.tab(3)(4), empty, b.tab(3)(6), empty),
+      Array(empty, b.tab(4)(1), empty, b.tab(4)(3), empty, b.tab(4)(5), empty, b.tab(4)(7)),
+      Array(b.tab(5)(0), empty, b.tab(5)(2), empty, b.tab(5)(4), empty, b.tab(5)(6), empty),
+      Array(empty, b.tab(6)(1), empty, b.tab(6)(3), empty, b.tab(6)(5), empty, b.tab(6)(7)),
+      Array(b.tab(7)(0), empty, b.tab(7)(2), empty, b.tab(7)(4), empty, b.tab(7)(6), empty))
+    new Board(newTab)
+  }
+
   def isChecker(x: Int, y: Int): Boolean = {
     if(tab(x)(y) == white || tab(x)(y) == black)
       true
@@ -668,7 +681,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
     }*/
     else{
 //      println("can't move ")
-//      println(x_s, y_s, x_e, y_e)
+      //println(x_s, y_s, x_e, y_e)
       false
     }
   }
@@ -682,7 +695,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       val y1 = m.move(i)._2
       val x2 = m.move(i)._3
       val y2 = m.move(i)._4
-//      println(x1, y1 , x2, y2)
+      //println(x1, y1 , x2, y2)
       move(x1,y1,x2,y2)
     }
   }

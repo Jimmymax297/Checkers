@@ -12,4 +12,10 @@ class Movement(l: List[(Int, Int, Int, Int)]) {
       println(" ( " + fromX + " , " + fromY + " ) " + " -> " + " ( " + toX + " , " + toY + " ) ")
     }
   }
+
+  def objectiveFunction(b: Board) : Int = {
+    val board = b.copyBoard()
+    board.executeMovement(this)
+    board.objectiveFunction
+  }
 }

@@ -113,6 +113,8 @@ object Checkers extends App {
         possibleStrike(i).print
       }
       val chosenMove = player_.chosenMovement(possibleStrike)
+      print("chosen : ")
+      chosenMove.print
       board.executeMovement(chosenMove)
       }
     else if (possibleMove.nonEmpty) {
@@ -130,6 +132,8 @@ object Checkers extends App {
           possibleMove(i).print
         }
         val chosenMove = player_.chosenMovement(possibleMove)
+        print("chosen : ")
+        chosenMove.print
         board.executeMovement(chosenMove)
       }
       else {
