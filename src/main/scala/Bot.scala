@@ -114,7 +114,7 @@ class Bot(board_ : Board, color_ : Int = Checkers.white) extends Player(board_ ,
 //    if(alpha > beta)
 //      println("cut : alpha > beta")
 //    println(i + 1 + " ? " + maxI)
-    if(alpha < beta
+    if(alpha <= beta
       && i + 1 < maxI){
 //      println("call neighbor")
       val neighbor =  whiteTurn(brd,pa,i+1,maxI,turn, alpha, beta ,d)
@@ -188,7 +188,7 @@ class Bot(board_ : Board, color_ : Int = Checkers.white) extends Player(board_ ,
 //    if(alpha > beta)
 //      println("cut : alpha > beta")
 //    println(i + 1 + " ? " + maxI)
-    if(alpha < beta
+    if(alpha <= beta
       && i + 1 < maxI){
 //      println("call neighbor")
       val neighbor =  blackTurn(brd,pa,i+1,maxI,turn,alpha, beta ,d)
