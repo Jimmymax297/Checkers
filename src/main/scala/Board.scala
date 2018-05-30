@@ -680,7 +680,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       }
     }*/
     else{
-//      println("can't move ")
+      throw new Exception("Can't move")
       //println(x_s, y_s, x_e, y_e)
       false
     }
@@ -713,17 +713,23 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       'B'
   }
 
-  def drawBoard(): Unit = {
+  def drawBoard(color: Int): Unit = {
     println("     0    1    2    3    4    5    6    7\n")
     for {
       i <- 0 until 8
     } yield {
-      print(i)
+      if(color == Checkers.white)
+        print(i)
+      else
+        print(7-i)
       print("    ")
       for {
         j <- 0 until 8
       } yield {
-        print(printing(i, j) + "    ")
+        if(color == Checkers.white)
+          print(printing(i, j) + "    ")
+        else
+          print(printing(7 - i, j) + "    ")
         if (j == 7)
           println("\n")
       }

@@ -1,3 +1,5 @@
+import java.io.PrintStream
+
 object Checkers extends App {
   //declartion and definitions
   val white: Int = -1
@@ -20,6 +22,8 @@ object Checkers extends App {
     }
   }
 
+  //System.setOut(new PrintStream("results"))
+
   //init
   val boardFields = Array(
     Array(empty, black, empty, black, empty, black, empty, black),
@@ -40,6 +44,16 @@ object Checkers extends App {
 //    Array(empty, empty, empty, white, empty, empty, empty, empty),
 //    Array(empty, empty, empty, empty, empty, empty, empty, empty)
 //  )
+//val boardFields = Array(
+//  Array(empty, black, empty, empty, empty, empty, empty, empty),
+//  Array(empty, empty, white, empty, white, empty, empty, empty),
+//  Array(empty, empty, empty, empty, empty, empty, empty, empty),
+//  Array(empty, empty, white, empty, white, empty, empty, empty),
+//  Array(empty, empty, empty, empty, empty, empty, empty, empty),
+//  Array(empty, empty, white, empty, white, empty, empty, empty),
+//  Array(empty, empty, empty, empty, empty, empty, empty, empty),
+//  Array(empty, empty, empty, empty, white, empty, empty, empty)
+//)
   val board =  new Board(boardFields)
 
 
@@ -50,7 +64,7 @@ object Checkers extends App {
     val bot = new Bot(board,oppositeColour(playerColor))
     //main loop
     while (GameState.stats(GameState.possibleMoves)!=0) {
-      board.drawBoard()
+      board.drawBoard(playerColor)
       if(GameState.stats(GameState.turnColor) == player.color){
         print("Turn: player , ")
         if(player.color == white) {

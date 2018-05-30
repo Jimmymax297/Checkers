@@ -2,6 +2,7 @@ class Movement(l: List[(Int, Int, Int, Int)]) {
   val move: List[(Int, Int, Int, Int)] = l
   def print:Unit = {
     val l = move.length
+
     for{
       i <- 0 until l
     } yield {
