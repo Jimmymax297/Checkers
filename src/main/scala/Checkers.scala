@@ -156,7 +156,7 @@ object Checkers extends App {
       if(playerColor == Value.white)
         println("Player wins!")
       else
-        println("IA wins!")
+        println("AI wins!")
       println("score: " + -score)
     }
     else if(score > 0){
