@@ -27,6 +27,9 @@ object Checkers extends App {
       else
         stats(turnColor) = Value.white
       stats(score) = board.objectiveFunction
+      if(stats(noStrikeKingMoves) >= 30){
+        stats(possibleMoves) = 0
+      }
     }
   }
 
@@ -108,7 +111,8 @@ object Checkers extends App {
         val chosenMove = player_.chosenMovement(possibleMove,len)
         print("chosen : ")
         chosenMove.print()
-        board.executeMovement(chosenMove)
+        if(board.executeMovement(chosenMove))
+          GameState.stats(GameState.noStrikeKingMoves) += 1
       }
       else {
         GameState.stats(GameState.possibleMoves) = 0
@@ -157,13 +161,16 @@ object Checkers extends App {
     }
     else if(score > 0){
       if(playerColor == Value.white)
-        println("IA wins!")
+        println("AI wins!")
       else
         println("Player wins!")
       println("score: " + score)
     }
-    else
+    else {
       println("Draw!")
+      if(GameState.stats(GameState.noStrikeKingMoves)>=30)
+        println("Over 15 king's moves without striking")
+    }
   }
 
   /**

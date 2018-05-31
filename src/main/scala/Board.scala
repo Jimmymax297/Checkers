@@ -855,16 +855,16 @@ class Board(t: Array[Array[Int]]){
     if (isChecker(x_s, y_s))
       if (math.abs(x_s - x_e) == 2) {
         strikeOnce(x_s, y_s, x_e, y_e)
-        true
+        false
       }
       else {
         moveChecker(x_s, y_s, x_e, y_e)
-        true
+        false
       }
     else if (isKing(x_s, y_s)) {
       if (canKingStrike(x_s, y_s, x_e, y_e)) {
         kingStrike(x_s, y_s, x_e, y_e)
-        true
+        false
       }
       else {
         moveKing(x_s, y_s, x_e, y_e)
@@ -880,8 +880,9 @@ class Board(t: Array[Array[Int]]){
     * Function that executes movement from exact Movement
     * @param m - movement to do
     */
-  def executeMovement(m: Movement): Unit = {
+  def executeMovement(m: Movement): Boolean = {
     val len =  m.move.length
+    val kingMoveOnly =
     for {
       i <- 0 until len
     } yield {
@@ -893,6 +894,7 @@ class Board(t: Array[Array[Int]]){
     }
     if(canBecomeKing(m.move(len - 1)._3, m.move(len - 1)._4))
       ascendIntoKing(m.move(len - 1)._3, m.move(len - 1)._4)
+    kingMoveOnly.reduce(_ && _)
   }
 
   /**
