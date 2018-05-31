@@ -1,5 +1,13 @@
+/**
+  * Class made to contain lists of movements.
+  * @param l - list of tuples
+  */
 class Movement(l: List[(Int, Int, Int, Int)]) {
   val move: List[(Int, Int, Int, Int)] = l
+
+  /**
+    * Function to print movement paths
+    */
   def print():Unit = {
     val l = move.length
     for{

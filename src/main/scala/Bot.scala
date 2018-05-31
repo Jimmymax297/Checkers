@@ -1,3 +1,8 @@
+/**
+  * Class containing negascout AI
+  * @param board_ - state of board
+  * @param color_ - player color
+  */
 class Bot(board_ : Board, color_ : Int = Checkers.Value.black) extends Player(board_ , color_ ) {
   /**
     * Decision of next bot move

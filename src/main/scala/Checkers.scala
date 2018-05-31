@@ -1,5 +1,11 @@
+/**
+  * Main object of project Checkers, runs the whole game.
+  */
 object Checkers extends App {
 
+  /**
+    * enum of Values on board
+    */
   object Value extends Enumeration{
     val white: Int = -1
     val empty: Int = 0
@@ -62,6 +68,11 @@ object Checkers extends App {
 
   gameOver()
 
+  /**
+    * Funtion which reads movements from actual board state for current player
+    * @param player_ - player or bot
+    * @param c - color of player
+    */
   def chooseMove(player_ : Player,c: Int): Unit = {
     val possibleStrike = board.possibleStrikePaths(c)
     val possibleMove = board.findAllMovePaths(c)
@@ -106,6 +117,10 @@ object Checkers extends App {
       GameState.stats(GameState.possibleMoves) = 0
   }
 
+  /**
+    * Function to pick color at the beginning of the game
+    * @return int of chosen color or exit
+    */
   def choosePlayerColor: Int = {
     println("Choose color (white/black) or exit")
     println("1. white")
@@ -151,6 +166,11 @@ object Checkers extends App {
       println("Draw!")
   }
 
+  /**
+    * Function to return opposing color
+    * @param color color to return opposing from
+    * @return opposing color
+    */
   def oppositeColor(color: Int): Int ={
     if(color == Value.white)
       Value.black
