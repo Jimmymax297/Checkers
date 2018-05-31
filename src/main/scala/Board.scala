@@ -1,6 +1,4 @@
-import java.lang.Cloneable
-
-class Board(t: Array[Array[Int]]) extends Cloneable{
+class Board(t: Array[Array[Int]]){
   val tab:Array[Array[Int]] = t
 
   def copyBoard(b: Board = this): Board = {
