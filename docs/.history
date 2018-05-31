@@ -1,0 +1,12 @@
+;reload; set _root_.org.jetbrains.sbt.StructureKeys.sbtStructureOptions in Global := "download resolveClassifiers resolveSbtClassifiers" ;*/*:dumpStructureTo C:/Users/Jimmy/AppData/Local/Temp/sbt-structure2.xml; session clear-all
+{file:/C:/Users/Jimmy/ScalaProject/CheckersJPS/}root/runMain
+{file:/C:/Users/Jimmy/ScalaProject/CheckersJPS/}root/run
+;reload; set _root_.org.jetbrains.sbt.StructureKeys.sbtStructureOptions in Global := "download resolveClassifiers resolveSbtClassifiers" ;*/*:dumpStructureTo C:/Users/Jimmy/AppData/Local/Temp/sbt-structure2.xml; session clear-all
+all {file:/C:/Users/Jimmy/ScalaProject/CheckersJPS/}root/products {file:/C:/Users/Jimmy/ScalaProject/CheckersJPS/}root/test:products
+task doc
+doc
+runMain
+run
+all {file:/C:/Users/Jimmy/ScalaProject/CheckersJPS/}root/products {file:/C:/Users/Jimmy/ScalaProject/CheckersJPS/}root/test:products
+doc
+all {file:/C:/Users/Jimmy/ScalaProject/CheckersJPS/}root/products {file:/C:/Users/Jimmy/ScalaProject/CheckersJPS/}root/test:products
