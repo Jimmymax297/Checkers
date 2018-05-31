@@ -1,116 +1,66 @@
 object Checkers extends App {
-  //declartion and definitions
-  val white: Int = -1
-  val empty: Int = 0
-  val black: Int = 1
-  val whiteKing: Int = -2
-  val blackKing: Int = 2
+
+  object Value extends Enumeration{
+    val white: Int = -1
+    val empty: Int = 0
+    val black: Int = 1
+    val whiteKing: Int = -3
+    val blackKing: Int = 3
+  }
 
   object GameState{
-    //val playerColor = 0
     val turnColor = 0
     val score = 1
     val possibleMoves = 2
-    val stats = Array(/*white,*/ white, 0, 7)
+    val noStrikeKingMoves = 3
+    val stats = Array(Value.white, 0, 7, 0)
 
-    def nextTurn: Unit = {
-      if(stats(turnColor) == white)
-        stats(turnColor) = black
+    def nextTurn(): Unit = {
+      if(stats(turnColor) == Value.white)
+        stats(turnColor) = Value.black
       else
-        stats(turnColor) = white
+        stats(turnColor) = Value.white
       stats(score) = board.objectiveFunction
     }
   }
 
-  //init
   val boardFields = Array(
-    Array(empty, black, empty, black, empty, black, empty, black),
-    Array(black, empty, black, empty, black, empty, black, empty),
-    Array(empty, black, empty, black, empty, black, empty, black),
-    Array(empty, empty, empty, empty, empty, empty, empty, empty),
-    Array(empty, empty, empty, empty, empty, empty, empty, empty),
-    Array(white, empty, white, empty, white, empty, white, empty),
-    Array(empty, white, empty, white, empty, white, empty, white),
-    Array(white, empty, white, empty, white, empty, white, empty))
-   /*val boardFields = Array(
-     Array(empty, whiteKing, empty, empty, empty, empty, empty, empty),
-     Array(empty, empty, empty, empty, empty, empty, empty, empty),
-     Array(empty, empty, empty, empty, empty, empty, empty, empty),
-     Array(empty, empty, empty, empty, empty, empty, empty, empty),
-     Array(empty, empty, empty, empty, empty, empty, empty, empty),
-     Array(empty, empty, empty, empty, empty, empty, empty, empty),
-     Array(empty, empty, empty, empty, empty, empty, empty, empty),
-     Array(white, empty, empty, empty, blackKing, empty, blackKing, empty)
-   )*/
-  /*val boardFields = Array(
-    Array(empty, empty, empty, empty, empty, empty, empty, empty),
-    Array(empty, empty, empty, empty, empty, empty, black, empty),
-    Array(empty, black, empty, black, empty, empty, empty, empty),
-    Array(empty, empty, empty, empty, empty, empty, empty, empty),
-    Array(empty, empty, empty, empty, empty, empty, empty, empty),
-    Array(empty, empty, empty, empty, empty, empty, black, empty),
-    Array(empty, empty, empty, empty, empty, empty, empty, whiteKing),
-    Array(empty, empty, empty, empty, empty, empty, empty, empty)
-  )*/
+    Array(Value.empty, Value.black, Value.empty, Value.black, Value.empty, Value.black, Value.empty, Value.black),
+    Array(Value.black, Value.empty, Value.black, Value.empty, Value.black, Value.empty, Value.black, Value.empty),
+    Array(Value.empty, Value.black, Value.empty, Value.black, Value.empty, Value.black, Value.empty, Value.black),
+    Array(Value.empty, Value.empty, Value.empty, Value.empty, Value.empty, Value.empty, Value.empty, Value.empty),
+    Array(Value.empty, Value.empty, Value.empty, Value.empty, Value.empty, Value.empty, Value.empty, Value.empty),
+    Array(Value.white, Value.empty, Value.white, Value.empty, Value.white, Value.empty, Value.white, Value.empty),
+    Array(Value.empty, Value.white, Value.empty, Value.white, Value.empty, Value.white, Value.empty, Value.white),
+    Array(Value.white, Value.empty, Value.white, Value.empty, Value.white, Value.empty, Value.white, Value.empty))
+
   val board =  new Board(boardFields)
 
+  val playerColor = choosePlayerColor
+  val player = new Player(board,playerColor)
+  val bot = new Bot(board,oppositeColor(playerColor))
 
-  try {
-    //input player color
-    val playerColor = choosePlayerColor
-    val player = new Player(board,playerColor)
-    val bot = new Bot(board,oppositeColor(playerColor))
-    //main loop
-    while (GameState.stats(GameState.possibleMoves)!=0) {
-      board.drawBoard(playerColor)
-      if(GameState.stats(GameState.turnColor) == player.color){
-        print("Turn: player , ")
-        if(player.color == white) {
-          println("white")
-          chooseMove(player,white)
-        }
-        else {
-          println("black")
-          chooseMove(player,black)
-        }
-      }else {
-        print("Turn bot , ")
-
-        if(bot.color == white){
-          println("white")
-          chooseMove(bot,white)
-        }
-        else{
-          println("black")
-          chooseMove(bot,black)
-        }
-      }
-      GameState.nextTurn
-    }
-    println("Game Over")
-    val score = GameState.stats(GameState.score)
-    if(score < 0){
-      //board.drawBoard(playerColor)
-      if(playerColor == white)
-        println("Player wins!")
+  while (GameState.stats(GameState.possibleMoves)!=0) {
+    board.drawBoard(playerColor)
+    if(GameState.stats(GameState.turnColor) == player.color){
+      print("Turn: player , ")
+      if(player.color == Value.white)
+        println("white")
       else
-        println("IA wins!")
-      println("score: " + -score)
-    }
-    else if(score > 0){
-      if(playerColor == white)
-        println("IA wins!")
+        println("black")
+      chooseMove(player,player.color)
+    }else {
+      print("Turn bot , ")
+      if(bot.color == Value.white)
+        println("white")
       else
-        println("Player wins!")
-      println("score: " + score)
+        println("black")
+      chooseMove(bot,bot.color)
     }
-    else
-      println("Draw!")
-
-  }catch {
-    case e: Exception => println("error: " + e.getCause)
-      System.exit(1)
+    GameState.nextTurn()
   }
+
+  gameOver()
 
   def chooseMove(player_ : Player,c: Int): Unit = {
     val possibleStrike = board.possibleStrikePaths(c)
@@ -123,16 +73,15 @@ object Checkers extends App {
         i<- 0 until len
       } yield {
         print(i + 1 + ":  ")
-        possibleStrike(i).print
+        possibleStrike(i).print()
       }
-      val chosenMove = player_.chosenMovement(possibleStrike)
+      val chosenMove = player_.chosenMovement(possibleStrike,len)
       print("chosen : ")
-      chosenMove.print
+      chosenMove.print()
       board.executeMovement(chosenMove)
     }
     else if (possibleMove.nonEmpty) {
       val whiteAndBlack = board.countCheckers
-      println(possibleMove.length)
       if(whiteAndBlack._1 > 0 && whiteAndBlack._2 > 0) {
 
 
@@ -143,18 +92,18 @@ object Checkers extends App {
           i <- 0 until len
         } yield {
           print(i + 1 + ": ")
-          possibleMove(i).print
+          possibleMove(i).print()
         }
-        val chosenMove = player_.chosenMovement(possibleMove)
+        val chosenMove = player_.chosenMovement(possibleMove,len)
         print("chosen : ")
-        chosenMove.print
+        chosenMove.print()
         board.executeMovement(chosenMove)
       }
       else {
         GameState.stats(GameState.possibleMoves) = 0
       }
     }else
-    GameState.stats(GameState.possibleMoves) = 0
+      GameState.stats(GameState.possibleMoves) = 0
   }
 
   def choosePlayerColor: Int = {
@@ -162,24 +111,51 @@ object Checkers extends App {
     println("1. white")
     println("2. black")
     println("3. exit")
-    val read = scala.io.StdIn.readInt()
-    if(read == 1)
-      white
-    else if(read == 2)
-      black
-    else if(read == 3){
-      System.exit(1)
-      -1
+    try{
+      val read = scala.io.StdIn.readInt()
+      if(read == 1)
+        Value.white
+      else if(read == 2)
+        Value.black
+      else if(read == 3){
+        System.exit(1)
+        -1
+      }
+      else
+        throw new IllegalArgumentException("wrong input")
+    }catch{
+      case e: Exception =>
+        println("please enter number of one of possible options")
+        choosePlayerColor
+    }
+  }
+
+  def gameOver(): Unit = {
+    println("Game Over")
+    val score = GameState.stats(GameState.score)
+    if(score < 0){
+      if(playerColor == Value.white)
+        println("Player wins!")
+      else
+        println("IA wins!")
+      println("score: " + -score)
+    }
+    else if(score > 0){
+      if(playerColor == Value.white)
+        println("IA wins!")
+      else
+        println("Player wins!")
+      println("score: " + score)
     }
     else
-      throw new IllegalArgumentException("wrong input")
+      println("Draw!")
   }
 
   def oppositeColor(color: Int): Int ={
-    if(color == white)
-      black
-    else if(color == black)
-      white
+    if(color == Value.white)
+      Value.black
+    else if(color == Value.black)
+      Value.white
     else
       throw new NoSuchFieldException("Unknown color")
   }

@@ -1,8 +1,7 @@
 class Movement(l: List[(Int, Int, Int, Int)]) {
   val move: List[(Int, Int, Int, Int)] = l
-  def print:Unit = {
+  def print():Unit = {
     val l = move.length
-
     for{
       i <- 0 until l
     } yield {
@@ -12,11 +11,5 @@ class Movement(l: List[(Int, Int, Int, Int)]) {
       val toY = move(i)._4
       println(" ( " + fromX + " , " + fromY + " ) " + " -> " + " ( " + toX + " , " + toY + " ) ")
     }
-  }
-
-  def objectiveFunction(b: Board) : Int = {
-    val board = b.copyBoard()
-    board.executeMovement(this)
-    board.objectiveFunction
   }
 }
