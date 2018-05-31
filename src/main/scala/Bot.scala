@@ -98,8 +98,8 @@ class Bot(board_ : Board, color_ : Int = Checkers.white) extends Player(board_ ,
 
 //    println("try score")
     val score = {
-      if (i != 0 && a < scoutScore._2 && scoutScore._2 < b)
-        negascout(newBoard, pa(i), -turn, a, b, d - 1)
+      if (i != 0 && a < scoutScore._2 && scoutScore._2 < b)//TODO: czy napewno
+        negascout(newBoard, pa(i), -turn, a, /*scoutScore._2*/b, d - 1)
       else
         scoutScore
     }
@@ -172,8 +172,8 @@ class Bot(board_ : Board, color_ : Int = Checkers.white) extends Player(board_ ,
 
 //    println("try score")
     val score = {
-      if (i != 0 && a < scoutScore._2 && scoutScore._2 < b)
-        negascout(newBoard, pa(i), -turn, a, b, d - 1)
+      if (i != 0 && a < scoutScore._2 && scoutScore._2 < b)//TODO: czy na pewno
+        negascout(newBoard, pa(i), -turn, a/*scoutScore._2*/, b, d - 1)
       else
         scoutScore
     }
