@@ -53,26 +53,16 @@ object Checkers extends App {
     Array(empty, empty, empty, empty, empty, empty, empty, empty)
   )
   val board =  new Board(boardFields)
-  //board.drawBoard()
-  /*val r = board.possibleKingStrikePaths(black)
-  val len = r.length
-  for {
-    i <- 0 until len
-  } yield {
-    println(r(i).move)
-  }*/
+
 
   try {
     //input player color
     val playerColor = choosePlayerColor
     val player = new Player(board,playerColor)
     val bot = new Bot(board,oppositeColor(playerColor))
-    println(player.color)
-    println(bot.color)
     //main loop
     while (GameState.stats(GameState.possibleMoves)!=0) {
-      board.drawBoard()
-      //println("*")
+      board.drawBoard(playerColor)
       if(GameState.stats(GameState.turnColor) == player.color){
         print("Turn: player , ")
         if(player.color == white) {
@@ -100,47 +90,67 @@ object Checkers extends App {
     println("Game Over")
     val score = GameState.stats(GameState.score)
     if(score < 0){
-      println("Player wins!")
+      if(playerColor == white)
+        println("Player wins!")
+      else
+        println("IA wins!")
       println("score: " + -score)
     }
     else if(score > 0){
-      println("IA wins!")
+      if(playerColor == white)
+        println("IA wins!")
+      else
+        println("Player wins!")
       println("score: " + score)
     }
     else
       println("Draw!")
 
   }catch {
-    case e: Exception => println("error: " + e.getMessage)
+    case e: Exception => println("error: " + e.getCause)
       System.exit(1)
   }
 
   def chooseMove(player_ : Player,c: Int): Unit = {
-    val possibleStrike = board.possibleStrikePaths(c) ++ board.possibleKingStrikePaths(c)
-    val possibleMove = board.findAllMovePaths(c) ++ board.findAllKingMovePaths(c)
+    val possibleStrike = board.possibleStrikePaths(c)
+    val possibleMove = board.findAllMovePaths(c)
     if (possibleStrike.nonEmpty) {
       GameState.stats(GameState.possibleMoves) = possibleStrike.length
       println("Possible strikes:")
       val len = possibleStrike.length
       for {
-        x <- 0 until len
+        i<- 0 until len
       } yield {
-        println(x + 1 + ":  " + possibleStrike(x).move)
+        print(i + 1 + ":  ")
+        possibleStrike(i).print
       }
       val chosenMove = player_.chosenMovement(possibleStrike)
+      print("chosen : ")
+      chosenMove.print
       board.executeMovement(chosenMove)
       }
     else if (possibleMove.nonEmpty) {
-      GameState.stats(GameState.possibleMoves) = possibleMove.length
-      println("Possible moves:")
-      val len = possibleMove.length
-      for {
-        x <- 0 until len
-      } yield {
-        println(x + 1 + ": " + possibleMove(x).move)
+      val whiteAndBlack = board.countCheckers
+      if(whiteAndBlack._1 > 0 && whiteAndBlack._2 > 0) {
+
+
+        GameState.stats(GameState.possibleMoves) = possibleMove.length
+        println("Possible moves:")
+        val len = possibleMove.length
+        for {
+          i <- 0 until len
+        } yield {
+          print(i + 1 + ": ")
+          possibleMove(i).print
+        }
+        val chosenMove = player_.chosenMovement(possibleMove)
+        print("chosen : ")
+        chosenMove.print
+        board.executeMovement(chosenMove)
       }
-      val chosenMove = player_.chosenMovement(possibleMove)
-      board.executeMovement(chosenMove)
+      else {
+        GameState.stats(GameState.possibleMoves) = 0
+      }
     }else
       GameState.stats(GameState.possibleMoves) = 0
   }

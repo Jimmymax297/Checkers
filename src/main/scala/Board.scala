@@ -613,12 +613,18 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
     for {
       i <- 0 until 8
     } yield {
-      print(i)
+      if(color == Checkers.white)
+        print(i)
+      else
+        print(7-i)
       print("    ")
       for {
         j <- 0 until 8
       } yield {
-        print(printing(i, j) + "    ")
+        if(color == Checkers.white)
+          print(printing(i, j) + "    ")
+        else
+          print(printing(7 - i, j) + "    ")
         if (j == 7)
           println("\n")
       }
@@ -626,4 +632,10 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   }
 
   def objectiveFunction():Int = tab(0).sum + tab(1).sum + tab(2).sum + tab(3).sum + tab(4).sum + tab(5).sum + tab(6).sum+ tab(7).sum
+
+  def countCheckers: (Int,Int) = {
+    val countWhite = tab.toList.flatten.count(_ == white)
+    val countBlack = tab.toList.flatten.count(_ == black)
+    (countWhite, countBlack)
+  }
 }
