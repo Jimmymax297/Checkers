@@ -210,7 +210,7 @@ class Board(t: Array[Array[Int]]){
     * @return - true or false
     */
   private def canMove(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
-    x_s == x_e || y_s == y_e || value(x_e, y_e) != Checkers.Value.empty || math.abs(y_s - y_e) != math.abs(x_s - x_e)
+    !(x_s == x_e || y_s == y_e || value(x_e, y_e) != Checkers.Value.empty || math.abs(y_s - y_e) != math.abs(x_s - x_e))
   }
 
   /**
