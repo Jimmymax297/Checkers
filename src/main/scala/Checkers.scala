@@ -23,7 +23,7 @@ object Checkers extends App {
   }
 
   //init
-  /*val boardFields = Array(
+  val boardFields = Array(
     Array(empty, black, empty, black, empty, black, empty, black),
     Array(black, empty, black, empty, black, empty, black, empty),
     Array(empty, black, empty, black, empty, black, empty, black),
@@ -31,18 +31,18 @@ object Checkers extends App {
     Array(empty, empty, empty, empty, empty, empty, empty, empty),
     Array(white, empty, white, empty, white, empty, white, empty),
     Array(empty, white, empty, white, empty, white, empty, white),
-    Array(white, empty, white, empty, white, empty, white, empty))*/
- /* val boardFields = Array(
-    Array(empty, empty, empty, empty, empty, empty, empty, empty),
-    Array(empty, empty, white, empty, empty, empty, empty, empty),
-    Array(empty, empty, empty, empty, empty, empty, empty, empty),
-    Array(empty, empty, empty, empty, empty, empty, empty, empty),
-    Array(empty, empty, empty, empty, empty, empty, empty, empty),
-    Array(empty, empty, empty, empty, empty, empty, empty, empty),
-    Array(empty, empty, empty, empty, empty, empty, empty, black),
-    Array(empty, empty, empty, empty, empty, empty, empty, empty)
-  )*/
-  val boardFields = Array(
+    Array(white, empty, white, empty, white, empty, white, empty))
+   /*val boardFields = Array(
+     Array(empty, whiteKing, empty, empty, empty, empty, empty, empty),
+     Array(empty, empty, empty, empty, empty, empty, empty, empty),
+     Array(empty, empty, empty, empty, empty, empty, empty, empty),
+     Array(empty, empty, empty, empty, empty, empty, empty, empty),
+     Array(empty, empty, empty, empty, empty, empty, empty, empty),
+     Array(empty, empty, empty, empty, empty, empty, empty, empty),
+     Array(empty, empty, empty, empty, empty, empty, empty, empty),
+     Array(white, empty, empty, empty, blackKing, empty, blackKing, empty)
+   )*/
+  /*val boardFields = Array(
     Array(empty, empty, empty, empty, empty, empty, empty, empty),
     Array(empty, empty, empty, empty, empty, empty, black, empty),
     Array(empty, black, empty, black, empty, empty, empty, empty),
@@ -51,7 +51,7 @@ object Checkers extends App {
     Array(empty, empty, empty, empty, empty, empty, black, empty),
     Array(empty, empty, empty, empty, empty, empty, empty, whiteKing),
     Array(empty, empty, empty, empty, empty, empty, empty, empty)
-  )
+  )*/
   val board =  new Board(boardFields)
 
 
@@ -90,6 +90,7 @@ object Checkers extends App {
     println("Game Over")
     val score = GameState.stats(GameState.score)
     if(score < 0){
+      //board.drawBoard(playerColor)
       if(playerColor == white)
         println("Player wins!")
       else
@@ -128,9 +129,10 @@ object Checkers extends App {
       print("chosen : ")
       chosenMove.print
       board.executeMovement(chosenMove)
-      }
+    }
     else if (possibleMove.nonEmpty) {
       val whiteAndBlack = board.countCheckers
+      println(possibleMove.length)
       if(whiteAndBlack._1 > 0 && whiteAndBlack._2 > 0) {
 
 
@@ -152,7 +154,7 @@ object Checkers extends App {
         GameState.stats(GameState.possibleMoves) = 0
       }
     }else
-      GameState.stats(GameState.possibleMoves) = 0
+    GameState.stats(GameState.possibleMoves) = 0
   }
 
   def choosePlayerColor: Int = {

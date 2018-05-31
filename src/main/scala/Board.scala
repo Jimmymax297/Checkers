@@ -1,15 +1,10 @@
 import java.lang.Cloneable
 
 class Board(t: Array[Array[Int]]) extends Cloneable{
-  val white: Int = -1
-  val empty: Int = 0
-  val black: Int = 1
-  val whiteKing: Int = -2
-  val blackKing: Int = 2
   val tab:Array[Array[Int]] = t
 
   def isChecker(x: Int, y: Int): Boolean = {
-    if(tab(x)(y) == white || tab(x)(y) == black)
+    if(tab(x)(y) == Checkers.white || tab(x)(y) == Checkers.black)
       true
     else
       false
@@ -21,19 +16,19 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
 
   def king(x: Int, y: Int): Unit = {
     if(isChecker(x, y))
-      if(value(x, y) == black)
-        change(x, y, blackKing)
+      if(value(x, y) == Checkers.black)
+        change(x, y, Checkers.blackKing)
       else
-        change(x, y, whiteKing)
+        change(x, y, Checkers.whiteKing)
   }
 
   def color(x: Int, y: Int): Int = {
-      if (value(x, y) == white || value(x, y) == whiteKing)
-        white
-      else if (value(x, y) == black || value(x, y) == blackKing)
-        black
+      if (value(x, y) == Checkers.white || value(x, y) == Checkers.whiteKing)
+        Checkers.white
+      else if (value(x, y) == Checkers.black || value(x, y) == Checkers.blackKing)
+        Checkers.black
       else
-        empty
+        Checkers.empty
   }
 
   def direction(x_s: Int, y_s: Int, x_e: Int, y_e: Int, v: Int): Int = {
@@ -51,22 +46,22 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
     if (canMove(x_s, y_s, x_e, y_e) && math.abs(y_e - y_s) == 1 && canMoveForward(x_s, y_s, x_e, y_e)) {
       val value = tab(x_s)(y_s)
       tab(x_e)(y_e) = value
-      tab(x_s)(y_s) = empty
+      tab(x_s)(y_s) = Checkers.empty
     }
   }
 
   def canMove(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
     if ((x_s == x_e || y_s == y_e) ||
-        value(x_e, y_e) != empty || math.abs(y_s - y_e) != math.abs(x_s - x_e))
+        value(x_e, y_e) != Checkers.empty || math.abs(y_s - y_e) != math.abs(x_s - x_e))
       false
     else
       true
   }
 
   def canMoveForward(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
-    if (canMove(x_s, y_s, x_e, y_e) && value(x_s, y_s) == white && x_e < x_s && (y_e < y_s || y_e > y_s))
+    if (canMove(x_s, y_s, x_e, y_e) && value(x_s, y_s) == Checkers.white && x_e < x_s && (y_e < y_s || y_e > y_s))
         true
-    else if (canMove(x_s, y_s, x_e, y_e) && value(x_s, y_s) == black && x_e > x_s && (y_e < y_s || y_e > y_s))
+    else if (canMove(x_s, y_s, x_e, y_e) && value(x_s, y_s) == Checkers.black && x_e > x_s && (y_e < y_s || y_e > y_s))
       true
     else
         false
@@ -83,8 +78,8 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   def strikeOnce(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Unit = {
     if (canStrikeOnce(x_s, y_s, x_e, y_e)) {
       tab(x_e)(y_e) = value(x_s, y_s)
-      tab(x_s)(y_s) = empty
-      tab((x_s + x_e) / 2)((y_s + y_e) / 2) = empty
+      tab(x_s)(y_s) = Checkers.empty
+      tab((x_s + x_e) / 2)((y_s + y_e) / 2) = Checkers.empty
 
     }
   }
@@ -93,16 +88,16 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
     val v = value(x_s, y_s)
     if(
       ((x_s - 1 >=0 && y_s + 1 <= 7 && x_s - 2 >= 0 && y_s + 2 <= 7)&&
-        (value(x_s - 1, y_s + 1) == -v && value(x_s - 2, y_s + 2) == empty)) //lewo dol
+        (value(x_s - 1, y_s + 1) == -v && value(x_s - 2, y_s + 2) == Checkers.empty)) //lewo dol
       ||
       ((x_s + 1 <= 7 && y_s + 1 <= 7 && x_s + 2 <= 7 && y_s + 2 <= 7)&&
-        (value(x_s + 1, y_s + 1) == -v && value(x_s + 2, y_s + 2) == empty)) //prawo dol
+        (value(x_s + 1, y_s + 1) == -v && value(x_s + 2, y_s + 2) == Checkers.empty)) //prawo dol
       ||
       ((x_s + 1 <= 7 && y_s - 1 >= 0 && x_s + 2 <= 7 && y_s - 2 >= 0)&&
-        (value(x_s + 1, y_s - 1) == -v && value(x_s + 2, y_s - 2) == empty)) //prawo gora
+        (value(x_s + 1, y_s - 1) == -v && value(x_s + 2, y_s - 2) == Checkers.empty)) //prawo gora
       ||
       ((x_s - 1 >= 0 && y_s - 1 >= 0 && x_s - 2 >= 0 && y_s - 2 >= 0)&&
-        (value(x_s - 1, y_s - 1) == -v && value(x_s - 2, y_s - 2) == empty)) //lewo gora
+        (value(x_s - 1, y_s - 1) == -v && value(x_s - 2, y_s - 2) == Checkers.empty)) //lewo gora
     )
       true
     else
@@ -136,7 +131,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       if j != i
     } yield {
      if (isKing(i, j) && color(i, j) == c) {
-       println("findAllKingStrikePaths")
+       //println("findAllKingStrikePaths")
        findStrikePathKing(i, j, new Movement(List[(Int, Int, Int, Int)]()), this)
      }
      else
@@ -153,7 +148,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       if j != i
     } yield {
         if (isKing(i, j) && color(i, j) == c) {
-          println("findAllKingMovePaths")
+          //println("findAllKingMovePaths")
           findMovePathKing(i, j)
         }
         else
@@ -185,7 +180,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   }
 
   def possibleStrikePaths(s: Int): List[Movement] = {
-    val l = findAllStrikePaths(s)
+    val l = findAllStrikePaths(s) ++ possibleKingStrikePaths(s)
     val lengthList = l.map(_.move.length)
     if (lengthList.nonEmpty) {
       val maxLength = lengthList.max
@@ -245,19 +240,19 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
           List[Movement]()
       }
     }
-    movements.toList.flatten.flatten.filter(_.move.nonEmpty)
+    (movements.toList.flatten.flatten ++ findAllKingMovePaths(color)).filter(_.move.nonEmpty)
   }
 
-  def copyBoard(b: Board): Board = {
+  def copyBoard(b: Board = this): Board = {
     val newTab = Array(
-      Array(empty, b.tab(0)(1), empty, b.tab(0)(3), empty, b.tab(0)(5), empty, b.tab(0)(7)),
-      Array(b.tab(1)(0), empty, b.tab(1)(2), empty, b.tab(1)(4), empty, b.tab(1)(6), empty),
-      Array(empty, b.tab(2)(1), empty, b.tab(2)(3), empty, b.tab(2)(5), empty, b.tab(2)(7)),
-      Array(b.tab(3)(0), empty, b.tab(3)(2), empty, b.tab(3)(4), empty, b.tab(3)(6), empty),
-      Array(empty, b.tab(4)(1), empty, b.tab(4)(3), empty, b.tab(4)(5), empty, b.tab(4)(7)),
-      Array(b.tab(5)(0), empty, b.tab(5)(2), empty, b.tab(5)(4), empty, b.tab(5)(6), empty),
-      Array(empty, b.tab(6)(1), empty, b.tab(6)(3), empty, b.tab(6)(5), empty, b.tab(6)(7)),
-      Array(b.tab(7)(0), empty, b.tab(7)(2), empty, b.tab(7)(4), empty, b.tab(7)(6), empty))
+      Array(Checkers.empty, b.tab(0)(1), Checkers.empty, b.tab(0)(3), Checkers.empty, b.tab(0)(5), Checkers.empty, b.tab(0)(7)),
+      Array(b.tab(1)(0), Checkers.empty, b.tab(1)(2), Checkers.empty, b.tab(1)(4), Checkers.empty, b.tab(1)(6), Checkers.empty),
+      Array(Checkers.empty, b.tab(2)(1), Checkers.empty, b.tab(2)(3), Checkers.empty, b.tab(2)(5), Checkers.empty, b.tab(2)(7)),
+      Array(b.tab(3)(0), Checkers.empty, b.tab(3)(2), Checkers.empty, b.tab(3)(4), Checkers.empty, b.tab(3)(6), Checkers.empty),
+      Array(Checkers.empty, b.tab(4)(1), Checkers.empty, b.tab(4)(3), Checkers.empty, b.tab(4)(5), Checkers.empty, b.tab(4)(7)),
+      Array(b.tab(5)(0), Checkers.empty, b.tab(5)(2), Checkers.empty, b.tab(5)(4), Checkers.empty, b.tab(5)(6), Checkers.empty),
+      Array(Checkers.empty, b.tab(6)(1), Checkers.empty, b.tab(6)(3), Checkers.empty, b.tab(6)(5), Checkers.empty, b.tab(6)(7)),
+      Array(b.tab(7)(0), Checkers.empty, b.tab(7)(2), Checkers.empty, b.tab(7)(4), Checkers.empty, b.tab(7)(6), Checkers.empty))
     new Board(newTab)
   }
 
@@ -272,7 +267,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   def findStrikeLeftDown(x: Int, y: Int, m: Movement, b: Board): List[Movement] ={
     val v = b.value(x, y)
     if ((x - 1 >=0 && y + 1 <= 7 && x - 2 >= 0 && y + 2 <= 7)&&
-      (b.value(x - 1, y + 1) * v < 0 && b.value(x - 2, y + 2) == empty)) {
+      (b.value(x - 1, y + 1) * v < 0 && b.value(x - 2, y + 2) == Checkers.empty)) {
       val board = copyBoard(b)
       board.move(x, y, x - 2, y + 2)
       findStrikePath(x - 2, y + 2, new Movement(m.move :+ (x, y, x - 2, y + 2)), board)
@@ -285,7 +280,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   def findStrikeRightDown(x: Int, y: Int, m: Movement, b: Board): List[Movement] ={
     val v = b.value(x, y)
     if ((x + 1 <= 7 && y + 1 <= 7 && x + 2 <= 7 && y + 2 <= 7)&&
-      (b.value(x + 1, y + 1)* v < 0 && b.value(x + 2, y + 2) == empty)) {
+      (b.value(x + 1, y + 1)* v < 0 && b.value(x + 2, y + 2) == Checkers.empty)) {
       val board = copyBoard(b)
       board.move(x, y, x + 2, y + 2)
       findStrikePath(x + 2, y + 2, new Movement(m.move :+ (x, y, x + 2, y + 2)), board)
@@ -298,7 +293,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   def findStrikeRightUp(x: Int, y: Int, m: Movement, b: Board): List[Movement] ={
     val v = b.value(x, y)
     if ((x + 1 <= 7 && y - 1 >= 0 && x + 2 <= 7 && y - 2 >= 0)&&
-      (b.value(x + 1, y - 1)* v < 0 && b.value(x + 2, y - 2) == empty)) {
+      (b.value(x + 1, y - 1)* v < 0 && b.value(x + 2, y - 2) == Checkers.empty)) {
       val board = copyBoard(b)
       board.move(x, y, x + 2, y - 2)
       findStrikePath(x + 2, y - 2, new Movement(m.move :+ (x, y, x + 2, y - 2)), board)
@@ -311,7 +306,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   def findStrikeLeftUp(x: Int, y: Int, m: Movement, b: Board): List[Movement] ={
     val v = b.value(x, y)
     if ((x - 1 >= 0 && y - 1 >= 0 && x - 2 >= 0 && y - 2 >= 0)&&
-      (b.value(x - 1, y - 1) * v < 0 && b.value(x - 2, y - 2) == empty)) {
+      (b.value(x - 1, y - 1) * v < 0 && b.value(x - 2, y - 2) == Checkers.empty)) {
       val board = copyBoard(b)
       board.move(x, y, x - 2, y - 2)
       findStrikePath(x - 2, y - 2, new Movement(m.move :+ (x, y, x - 2, y - 2)), board)
@@ -322,7 +317,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   }
 
   def isKing(x: Int, y: Int): Boolean = {
-    value(x, y) == whiteKing || value(x, y) == blackKing
+    value(x, y) == Checkers.whiteKing || value(x, y) == Checkers.blackKing
   }
 
   def canKingMove(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
@@ -352,11 +347,11 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   }
 
   def onTheWay(x: Int, y: Int, cx: Int, cy: Int): Int = {
-    if (value(cx, cy) == empty) {
+    if (value(cx, cy) == Checkers.empty) {
       0
     }
-    else if ((value(x,y) == blackKing && (value(cx,cy) == whiteKing || value(cx,cy) == white))||
-      value(x,y) == whiteKing && (value(cx,cy) == blackKing || value(cx,cy) == black)) {
+    else if ((value(x,y) == Checkers.blackKing && (value(cx,cy) == Checkers.whiteKing || value(cx,cy) == Checkers.white))||
+      value(x,y) == Checkers.whiteKing && (value(cx,cy) == Checkers.blackKing || value(cx,cy) == Checkers.black)) {
       1
     }
     else {
@@ -395,7 +390,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       i <- 1 until 8
     } yield {
       if (x - i >= 0 && y + i <= 7 && canKingMove(x, y, x - i, y + i)) {
-        println("upright")
+        //println("upright")
         new Movement(List((x, y, x - i, y + i)))
       }
       else
@@ -409,7 +404,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       i <- 1 until 8
     } yield {
       if (x + i <= 7 && y + i <= 7 && canKingMove(x, y, x + i, y + i)) {
-        println("downright")
+        //println("downright")
         new Movement(List((x, y, x + i, y + i)))
       }
       else
@@ -423,7 +418,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       i <- 1 until 8
     } yield {
       if (x + i <= 7 && y - i >= 0 && canKingMove(x, y, x + i, y - i)) {
-        println("downleft")
+        //println("downleft")
         new Movement(List((x, y, x + i, y - i)))
       }
       else
@@ -437,7 +432,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
       i <- 1 until 8
     } yield {
       if (x - i >= 0 && y - i >= 0 && canKingMove(x, y, x - i, y - i)) {
-        println("upleft")
+        //println("upleft")
         new Movement(List((x, y, x - i, y - i)))
       }
       else
@@ -523,7 +518,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   def moveKing(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Unit = {
     if (isKing(x_s, y_s) && canKingMove(x_s, y_s, x_e, y_e)){
       tab(x_e)(y_e) = value(x_s, y_s)
-      tab(x_s)(y_s) = empty
+      tab(x_s)(y_s) = Checkers.empty
     }
   }
 
@@ -544,7 +539,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
           tab(x_s - i)(y_s - i) = 0//lewo gora
       }
       tab(x_e)(y_e) = value(x_s, y_s)
-      tab(x_s)(y_s) = empty
+      tab(x_s)(y_s) = Checkers.empty
     }
   }
 
@@ -589,7 +584,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   }
 
   def becomeKing(x: Int, y: Int): Boolean = {
-    if (isChecker(x, y) && (color(x, y) == white && x == 0) || (color(x, y) == black && x == 7))
+    if (isChecker(x, y) && (color(x, y) == Checkers.white && x == 0) || (color(x, y) == Checkers.black && x == 7))
       true
     else
       false
@@ -598,17 +593,17 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   def printing(x: Int, y: Int): Any = {
     if (value(x, y) == 0)
       '-'
-    else if (value(x, y) == black)
+    else if (value(x, y) == Checkers.black)
       'c'
-    else if (value(x, y) == blackKing)
+    else if (value(x, y) == Checkers.blackKing)
       'C'
-    else if (value(x, y) == white)
+    else if (value(x, y) == Checkers.white)
       'b'
-    else if (value(x, y) == whiteKing)
+    else if (value(x, y) == Checkers.whiteKing)
       'B'
   }
 
-  def drawBoard(): Unit = {
+  def drawBoard(color : Int): Unit = {
     println("x/y  0    1    2    3    4    5    6    7\n")
     for {
       i <- 0 until 8
@@ -634,8 +629,8 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   def objectiveFunction():Int = tab(0).sum + tab(1).sum + tab(2).sum + tab(3).sum + tab(4).sum + tab(5).sum + tab(6).sum+ tab(7).sum
 
   def countCheckers: (Int,Int) = {
-    val countWhite = tab.toList.flatten.count(_ == white)
-    val countBlack = tab.toList.flatten.count(_ == black)
+    val countWhite = tab.toList.flatten.count((x) => x == Checkers.white || x == Checkers.whiteKing)
+    val countBlack = tab.toList.flatten.count((x) => x == Checkers.black || x == Checkers.blackKing)
     (countWhite, countBlack)
   }
 }
