@@ -32,7 +32,7 @@ object Checkers extends App {
     Array(white, empty, white, empty, white, empty, white, empty),
     Array(empty, white, empty, white, empty, white, empty, white),
     Array(white, empty, white, empty, white, empty, white, empty))*/
-  val boardFields = Array(
+ /* val boardFields = Array(
     Array(empty, empty, empty, empty, empty, empty, empty, empty),
     Array(empty, empty, white, empty, empty, empty, empty, empty),
     Array(empty, empty, empty, empty, empty, empty, empty, empty),
@@ -40,6 +40,16 @@ object Checkers extends App {
     Array(empty, empty, empty, empty, empty, empty, empty, empty),
     Array(empty, empty, empty, empty, empty, empty, empty, empty),
     Array(empty, empty, empty, empty, empty, empty, empty, black),
+    Array(empty, empty, empty, empty, empty, empty, empty, empty)
+  )*/
+  val boardFields = Array(
+    Array(empty, empty, empty, empty, empty, empty, empty, empty),
+    Array(empty, empty, empty, empty, empty, empty, black, empty),
+    Array(empty, black, empty, black, empty, empty, empty, empty),
+    Array(empty, empty, empty, empty, empty, empty, empty, empty),
+    Array(empty, empty, empty, empty, empty, empty, empty, empty),
+    Array(empty, empty, empty, empty, empty, empty, black, empty),
+    Array(empty, empty, empty, empty, empty, empty, empty, whiteKing),
     Array(empty, empty, empty, empty, empty, empty, empty, empty)
   )
   val board =  new Board(boardFields)

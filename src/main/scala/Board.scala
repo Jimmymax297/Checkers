@@ -73,7 +73,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   }
 
   def canStrikeOnce(x_s: Int, y_s: Int, x_e: Int, y_e: Int): Boolean = {
-    if (isChecker(x_s, y_s) && canMove(x_s, y_s, x_e, y_e) && value((x_s + x_e) / 2, (y_s + y_e) / 2) == -value(x_s, y_s)) {
+    if (isChecker(x_s, y_s) && canMove(x_s, y_s, x_e, y_e) && value((x_s + x_e) / 2, (y_s + y_e) / 2) * value(x_s, y_s) < 0) {
       true
     }
     else
@@ -272,7 +272,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   def findStrikeLeftDown(x: Int, y: Int, m: Movement, b: Board): List[Movement] ={
     val v = b.value(x, y)
     if ((x - 1 >=0 && y + 1 <= 7 && x - 2 >= 0 && y + 2 <= 7)&&
-      (b.value(x - 1, y + 1) == -v && b.value(x - 2, y + 2) == empty)) {
+      (b.value(x - 1, y + 1) * v < 0 && b.value(x - 2, y + 2) == empty)) {
       val board = copyBoard(b)
       board.move(x, y, x - 2, y + 2)
       findStrikePath(x - 2, y + 2, new Movement(m.move :+ (x, y, x - 2, y + 2)), board)
@@ -285,7 +285,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   def findStrikeRightDown(x: Int, y: Int, m: Movement, b: Board): List[Movement] ={
     val v = b.value(x, y)
     if ((x + 1 <= 7 && y + 1 <= 7 && x + 2 <= 7 && y + 2 <= 7)&&
-      (b.value(x + 1, y + 1) == -v && b.value(x + 2, y + 2) == empty)) {
+      (b.value(x + 1, y + 1)* v < 0 && b.value(x + 2, y + 2) == empty)) {
       val board = copyBoard(b)
       board.move(x, y, x + 2, y + 2)
       findStrikePath(x + 2, y + 2, new Movement(m.move :+ (x, y, x + 2, y + 2)), board)
@@ -298,7 +298,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   def findStrikeRightUp(x: Int, y: Int, m: Movement, b: Board): List[Movement] ={
     val v = b.value(x, y)
     if ((x + 1 <= 7 && y - 1 >= 0 && x + 2 <= 7 && y - 2 >= 0)&&
-      (b.value(x + 1, y - 1) == -v && b.value(x + 2, y - 2) == empty)) {
+      (b.value(x + 1, y - 1)* v < 0 && b.value(x + 2, y - 2) == empty)) {
       val board = copyBoard(b)
       board.move(x, y, x + 2, y - 2)
       findStrikePath(x + 2, y - 2, new Movement(m.move :+ (x, y, x + 2, y - 2)), board)
@@ -311,7 +311,7 @@ class Board(t: Array[Array[Int]]) extends Cloneable{
   def findStrikeLeftUp(x: Int, y: Int, m: Movement, b: Board): List[Movement] ={
     val v = b.value(x, y)
     if ((x - 1 >= 0 && y - 1 >= 0 && x - 2 >= 0 && y - 2 >= 0)&&
-      (b.value(x - 1, y - 1) == -v && b.value(x - 2, y - 2) == empty)) {
+      (b.value(x - 1, y - 1) * v < 0 && b.value(x - 2, y - 2) == empty)) {
       val board = copyBoard(b)
       board.move(x, y, x - 2, y - 2)
       findStrikePath(x - 2, y - 2, new Movement(m.move :+ (x, y, x - 2, y - 2)), board)
